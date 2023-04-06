@@ -6,9 +6,9 @@ import {
 
 describe('OrderEnumsUtils', () => {
   it('get an existing order status', () => {
-    const status = OrderEnumsUtils.getOrderStatus('Created');
+    const status = OrderEnumsUtils.getOrderStatus('Pending');
 
-    expect(status).toEqual(OrderStatus.Created);
+    expect(status).toEqual(OrderStatus.Pending);
   });
 
   it('get undefined if the state of an order does not exist', () => {

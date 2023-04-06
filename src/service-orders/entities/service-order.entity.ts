@@ -1,4 +1,4 @@
-import { Customer } from 'src/customers/entities/customer.entity';
+import { Customer } from 'src/customers/domain/customer.entity';
 import { OrderPriority } from './enums/service-order-enums';
 import { OrderStatus } from './enums/service-order-enums';
 import { OrderLocation } from './order-location.entity';

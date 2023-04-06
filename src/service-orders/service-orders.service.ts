@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CustomersService } from 'src/customers/customers.service';
-import { UsersService } from 'src/users/users.service';
+import { CustomersService } from '../customers/customers.service';
+import { UsersService } from '../users/users.service';
 import { CreateServiceOrderDto } from './dto/create-service-order.dto';
 import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
 import { OrderType } from './entities/order-type.entity';

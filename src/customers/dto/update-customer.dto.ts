@@ -1,4 +1,4 @@
-import { Customer } from '../entities/customer.entity';
+import { Customer } from '../domain/customer.entity';
 import { CreateCustomerDto } from './create-customer.dto';
 
 export class UpdateCustomerDto extends CreateCustomerDto {
