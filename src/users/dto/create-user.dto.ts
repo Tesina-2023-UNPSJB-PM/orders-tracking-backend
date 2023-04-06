@@ -1,5 +1,5 @@
-import { UserStatus } from '../entities/enums/user-status.enum';
-import { User } from '../entities/user.entity';
+import { UserStatus } from '../domain/enums/user-status.enum';
+import { User } from '../domain/user.entity';
 
 export class CreateUserDto {
   firstName: string;

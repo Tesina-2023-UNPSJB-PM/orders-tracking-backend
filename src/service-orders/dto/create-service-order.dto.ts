@@ -1,11 +1,11 @@
 import {
   OrderEnumsUtils,
   OrderPriority,
-} from '../entities/enums/service-order-enums';
-import { OrderStatus } from '../entities/enums/service-order-enums';
-import { OrderLocation } from '../entities/order-location.entity';
-import { ServiceDetail } from '../entities/service-order.entity';
-import { ServiceOrder } from '../entities/service-order.entity';
+} from '../domain/enums/service-order-enums';
+import { OrderStatus } from '../domain/enums/service-order-enums';
+import { OrderLocation } from '../domain/order-location.entity';
+import { ServiceDetail } from '../domain/service-order.entity';
+import { ServiceOrder } from '../domain/service-order.entity';
 
 export class CreateServiceOrderDto {
   number: string;

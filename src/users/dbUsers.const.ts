@@ -1,4 +1,4 @@
-import { UserStatus } from './entities/enums/user-status.enum';
+import { UserStatus } from './domain/enums/user-status.enum';
 
 export const dbUsers = [
   {

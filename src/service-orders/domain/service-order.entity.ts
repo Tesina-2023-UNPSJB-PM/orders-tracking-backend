@@ -3,7 +3,7 @@ import { OrderPriority } from './enums/service-order-enums';
 import { OrderStatus } from './enums/service-order-enums';
 import { OrderLocation } from './order-location.entity';
 import { OrderType } from './order-type.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/users/domain/user.entity';
 
 export type ServiceDetail = any;
 

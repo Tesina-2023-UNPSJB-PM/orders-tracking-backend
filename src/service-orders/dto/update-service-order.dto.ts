@@ -1,6 +1,6 @@
-import { ServiceOrder } from '../entities/service-order.entity';
+import { ServiceOrder } from '../domain/service-order.entity';
 import { CreateServiceOrderDto } from './create-service-order.dto';
-import { OrderEnumsUtils } from '../entities/enums/service-order-enums';
+import { OrderEnumsUtils } from '../domain/enums/service-order-enums';
 
 export class UpdateServiceOrderDto extends CreateServiceOrderDto {
   id: number;

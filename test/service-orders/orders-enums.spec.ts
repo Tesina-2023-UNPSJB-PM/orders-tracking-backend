@@ -2,7 +2,7 @@ import {
   OrderEnumsUtils,
   OrderPriority,
   OrderStatus,
-} from './service-order-enums';
+} from '../../src/service-orders/domain/enums/service-order-enums';
 
 describe('OrderEnumsUtils', () => {
   it('get an existing order status', () => {

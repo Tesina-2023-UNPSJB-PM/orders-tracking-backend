@@ -3,12 +3,12 @@ import { CustomersService } from '../customers/customers.service';
 import { UsersService } from '../users/users.service';
 import { CreateServiceOrderDto } from './dto/create-service-order.dto';
 import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
-import { OrderType } from './entities/order-type.entity';
-import { ServiceOrder } from './entities/service-order.entity';
+import { OrderType } from './domain/order-type.entity';
+import { ServiceOrder } from './domain/service-order.entity';
 import { DB_TYPES } from './db/order-types-db.const';
 import { DB_ORDERS } from './db/orders-db.const';
-import { OrderEnumsUtils } from './entities/enums/service-order-enums';
-import { OrderLocation } from './entities/order-location.entity';
+import { OrderEnumsUtils } from './domain/enums/service-order-enums';
+import { OrderLocation } from './domain/order-location.entity';
 
 @Injectable()
 export class ServiceOrdersService {
