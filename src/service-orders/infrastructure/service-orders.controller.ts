@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ServiceOrdersService } from './service-orders.service';
-import { CreateServiceOrderDto } from './dto/create-service-order.dto';
-import { UpdateServiceOrderDto } from './dto/update-service-order.dto';
+import { ServiceOrdersService } from '../application/service-orders.service';
+import { CreateServiceOrderDto } from '../dto/create-service-order.dto';
+import { UpdateServiceOrderDto } from '../dto/update-service-order.dto';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
@@ -25,14 +25,14 @@ export class ServiceOrdersController {
     return this.serviceOrdersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.serviceOrdersService.findOne(id);
-  }
-
   @Patch()
   update(@Body() updateServiceOrderDto: UpdateServiceOrderDto) {
     return this.serviceOrdersService.update(updateServiceOrderDto);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.serviceOrdersService.findOne(id);
   }
 
   @Delete(':id')
