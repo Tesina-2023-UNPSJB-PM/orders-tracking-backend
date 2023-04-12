@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ServiceOrdersService } from '../application/service-orders.service';
-import { CreateServiceOrderDto } from '../dto/create-service-order.dto';
-import { UpdateServiceOrderDto } from '../dto/update-service-order.dto';
+import { ServiceOrdersService } from '../../application/service-orders.service';
+import { CreateServiceOrderDto } from '../../dto/create-service-order.dto';
+import { UpdateServiceOrderDto } from '../../dto/update-service-order.dto';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {

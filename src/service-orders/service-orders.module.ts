@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ServiceOrdersService } from './application/service-orders.service';
-import { ServiceOrdersController } from './infrastructure/service-orders.controller';
+import { ServiceOrdersController } from './infrastructure/controller/service-orders.controller';
 import { CustomersModule } from 'src/customers/customers.module';
 import { UsersModule } from 'src/users/users.module';
 
