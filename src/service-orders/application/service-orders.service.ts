@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CustomersService } from '../../customers/customers.service';
 import { UsersService } from '../../users/users.service';
 import { CreateServiceOrderDto } from '../dto/create-service-order.dto';
 import { UpdateServiceOrderDto } from '../dto/update-service-order.dto';
@@ -16,10 +15,7 @@ export class ServiceOrdersService {
   private dbOrders: ServiceOrder[] = [];
   private dbTypes: OrderType[] = [];
 
-  constructor(
-    private readonly userService: UsersService,
-    private readonly customerService: CustomersService,
-  ) {
+  constructor(private readonly userService: UsersService) {
     this.initDbTypes();
     this.initDbOrders();
   }
@@ -36,9 +32,10 @@ export class ServiceOrdersService {
     );
     newOrder.assignedUser = userFound;
 
-    const customerFound = this.customerService.findOne(
+    /*const customerFound = this.customerService.findOne(
       createServiceOrderDto.customerId,
-    );
+    );*/
+    const customerFound = undefined;
 
     newOrder.customer = customerFound;
 
@@ -101,7 +98,7 @@ export class ServiceOrdersService {
     result.assignedTime = item.assignedTime && new Date(item.assignedTime);
     result.estimatedResolutionTime = new Date(item.estimatedResolutionTime);
     result.resolutionTime = new Date(item.resolutionTimeout);
-    result.customer = this.customerService.findOne(item.customer);
+    //result.customer = this.customerService.findOne(item.customer);
     result.serviceDetail = item.serviceDetail;
 
     return result;

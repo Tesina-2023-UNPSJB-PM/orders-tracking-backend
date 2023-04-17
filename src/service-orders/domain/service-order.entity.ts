@@ -1,9 +1,9 @@
-import { Customer } from 'src/customers/domain/customer.entity';
+import { Customer } from '../../customers/domain/entities/customer.entity';
 import { OrderPriority } from './enums/service-order-enums';
 import { OrderStatus } from './enums/service-order-enums';
 import { OrderLocation } from './order-location.entity';
 import { OrderType } from './order-type.entity';
-import { User } from 'src/users/domain/user.entity';
+import { User } from '../../users/domain/user.entity';
 
 export type ServiceDetail = any;
 

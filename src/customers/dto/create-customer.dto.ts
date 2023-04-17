@@ -1,23 +1,21 @@
-import { Customer } from '../domain/customer.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { CustomerData } from '../infrastructure/persistence/entitiesDB/customerData';
 
 export class CreateCustomerDto {
+  @ApiProperty({ example: '00001' })
   customerNumber: string;
   //Cuit o Cuil
-  documentNumer: string;
+  @ApiProperty({ example: '24254789', description: 'Cuit o Cuil' })
+  documentNumber: string;
+  @ApiProperty({ example: 'Pepe' })
   firstName: string;
+  @ApiProperty({ example: 'Sanchez' })
   lastName: string;
-  email: string;
-  phone: string;
-
-  public static mapToCustomer(from: CreateCustomerDto): Customer {
-    const result = new Customer();
-    result.customerNumber = from.customerNumber;
-    result.documentNumer = from.documentNumer;
-    result.firstName = from.firstName;
-    result.lastName = from.lastName;
-    result.phone = from.phone;
-    result.email = from.email;
-
-    return result;
-  }
+  @ApiProperty({
+    example: 'exampleCustomer@gmail.com',
+    description: 'Email valid of customer',
+  })
+  email?: string;
+  @ApiProperty({ example: '+5428045123145' })
+  phone?: string;
 }

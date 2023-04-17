@@ -17,6 +17,7 @@ const configPath = path.join(
   imports: [
     ConfigModule.forRoot({
       envFilePath: configPath,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

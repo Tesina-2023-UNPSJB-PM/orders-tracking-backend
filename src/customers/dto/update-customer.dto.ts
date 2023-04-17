@@ -1,14 +1,14 @@
-import { Customer } from '../domain/customer.entity';
+import { CustomerData } from '../infrastructure/persistence/entitiesDB/customerData';
 import { CreateCustomerDto } from './create-customer.dto';
 
 export class UpdateCustomerDto extends CreateCustomerDto {
   id: number;
 
-  public static mapToCustomer(from: UpdateCustomerDto): Customer {
-    const result = new Customer();
+  public static mapToCustomer(from: UpdateCustomerDto): CustomerData {
+    const result = new CustomerData();
     result.id = from.id;
     result.customerNumber = from.customerNumber;
-    result.documentNumer = from.documentNumer;
+    result.documentNumber = from.documentNumber;
     result.firstName = from.firstName;
     result.lastName = from.lastName;
     result.phone = from.phone;

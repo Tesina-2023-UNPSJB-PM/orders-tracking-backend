@@ -1,14 +1,14 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'CUSTOMER' })
-export class Customer {
+export class CustomerData {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  customerNumber?: string;
+  customerNumber: string;
   //Cuit o Cuil
   @Column()
-  documentNumer: string;
+  documentNumber: string;
   @Column()
   firstName: string;
   @Column()
