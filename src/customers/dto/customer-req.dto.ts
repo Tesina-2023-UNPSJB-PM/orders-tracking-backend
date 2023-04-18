@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CustomerData } from '../infrastructure/persistence/entitiesDB/customerData';
 
-export class CreateCustomerDto {
+export class CustomerRequestDTO {
+  @ApiProperty({ required: false })
+  id?: number;
   @ApiProperty({ example: '00001' })
   customerNumber: string;
   //Cuit o Cuil
@@ -14,8 +15,13 @@ export class CreateCustomerDto {
   @ApiProperty({
     example: 'exampleCustomer@gmail.com',
     description: 'Email valid of customer',
+    required: false,
   })
   email?: string;
-  @ApiProperty({ example: '+5428045123145' })
+  @ApiProperty({
+    example: '+5428045123145',
+    required: false,
+    description: 'Valid customer phone number.',
+  })
   phone?: string;
 }
