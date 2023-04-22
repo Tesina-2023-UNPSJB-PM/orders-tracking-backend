@@ -1,11 +1,18 @@
+import { InvalidDomainException } from '../exceptions/invalidDomain.exception';
 import { Coordinates } from '../valueObjects/coordinates.vo';
 import { Entity } from './entity';
 
+export interface AddressValues {
+    description: string;
+    city: string;
+    zipCode?: string;
+    state: string;
+    country: string;
+    latitude?: number;
+    longitude?: number;
+}
 interface AddressProps {
-    streetName: string;
-    streetsNumber: string;
-    floor?: string;
-    departamentNumber?: string;
+    description: string;
     city: string;
     zipCode?: string;
     state: string;
@@ -18,20 +25,8 @@ export class Address extends Entity<AddressProps> {
         super(props, id);
     }
 
-    get streetName(): string {
-        return this.props?.streetName;
-    }
-
-    get streetsNumber(): string {
-        return this.props.streetsNumber;
-    }
-
-    get floor(): string | undefined {
-        return this.props.floor;
-    }
-
-    get departamentNumber(): string | undefined {
-        return this.props.departamentNumber;
+    get description(): string {
+        return this.props.description;
     }
 
     get city(): string {
@@ -50,33 +45,57 @@ export class Address extends Entity<AddressProps> {
         return this.props.country;
     }
 
-    public createAddress(
-        streetName: string,
-        streetsNumber: string,
-        city: string,
-        state: string,
-        country: string,
-        location: Coordinates,
-        floor?: string,
-        departamentNumber?: string,
-        zipCode?: string,
-        id?: number,
-    ): Address {
-        // Integrity and consistency validation
+    get location(): Coordinates {
+        return this.props.location;
+    }
 
+    public static createAddress(values: AddressValues, id?: number): Address {
+        // Integrity and consistency validation
+        if (!values)
+            throw new InvalidDomainException('Address values undefined');
+
+        Address.validateDescription(values);
+
+        Address.validateCity(values);
+
+        Address.validateState(values);
+
+        Address.validateCountry(values);
+
+        const location = Coordinates.createCoordinates(
+            values.latitude,
+            values.longitude,
+        );
         return new Address(
             {
-                streetName,
-                streetsNumber,
-                floor,
-                departamentNumber,
-                city,
-                state,
-                country,
-                zipCode,
+                description: values.description,
+                city: values.city,
+                state: values.state,
+                country: values.country,
+                zipCode: values.zipCode,
                 location,
             },
             id,
         );
+    }
+
+    private static validateCountry(values: AddressValues) {
+        if (!values.country || values.country.trim().length === 0)
+            throw new InvalidDomainException('Country undefined');
+    }
+
+    private static validateState(values: AddressValues) {
+        if (!values.state || values.state.trim().length === 0)
+            throw new InvalidDomainException('State undefined');
+    }
+
+    private static validateCity(values: AddressValues) {
+        if (!values.city || values.city.trim().length === 0)
+            throw new InvalidDomainException('City undefined');
+    }
+
+    private static validateDescription(values: AddressValues) {
+        if (!values.description || values.description.trim().length === 0)
+            throw new InvalidDomainException('Address description undefined');
     }
 }

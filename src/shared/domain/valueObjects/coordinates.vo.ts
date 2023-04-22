@@ -1,3 +1,4 @@
+import { InvalidDomainException } from '../exceptions/invalidDomain.exception';
 import { ValueObject } from './valueObject';
 
 interface CoordinatesProps {
@@ -20,8 +21,11 @@ export class Coordinates extends ValueObject<CoordinatesProps> {
         return this.props.longitude;
     }
 
-    public static createCoordinates(lat: number, lon: number): Coordinates {
+    public static createCoordinates(lat?: number, lon?: number): Coordinates {
         // Integrity and consistency validation
+        if (!lat) throw new InvalidDomainException('Latitude undefined');
+        if (!lon) throw new InvalidDomainException('Longitude undefined');
+
         if (lat < -90 || lat > 90) {
             throw new Error('Latitude should be between -90 and 90');
         }
