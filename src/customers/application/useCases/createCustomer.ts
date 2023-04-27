@@ -7,33 +7,32 @@ import { CustomerRepository } from '../../../customers/domain/repositories/custo
 import { CustomerRequestDTO } from '../../../customers/dto/customer-req.dto';
 import { CustomerResponseDTO } from '../../../customers/dto/customer-resp.dto';
 import { CustomerMapper } from '../mappers/customerMapper';
-
 @Injectable()
 export class CreateCustomer {
-    private readonly existsCustomerByNumber: ExistsCustomerByNumber;
-    private readonly customerMapper: CustomerMapper;
+  private readonly existsCustomerByNumber: ExistsCustomerByNumber;
+  private readonly customerMapper: CustomerMapper;
 
-    constructor(
-        @Inject('CustomerRepository')
-        private customerRepository: CustomerRepository,
-    ) {
-        this.existsCustomerByNumber = new ExistsCustomerByNumber(
-            customerRepository,
-        );
-        this.customerMapper = new CustomerMapper();
-    }
+  constructor(
+    @Inject('CustomerRepository')
+    private customerRepository: CustomerRepository,
+  ) {
+    this.existsCustomerByNumber = new ExistsCustomerByNumber(
+      customerRepository,
+    );
+    this.customerMapper = new CustomerMapper();
+  }
 
-    async run(data: CustomerRequestDTO): Promise<CustomerResponseDTO> {
-        const existCustomer = await this.existsCustomerByNumber.run(
-            data.customerNumber,
-        );
+  async run(data: CustomerRequestDTO): Promise<CustomerResponseDTO> {
+    const existCustomer = await this.existsCustomerByNumber.run(
+      data.customerNumber,
+    );
 
-        if (existCustomer)
-            throw new CustomerAlreadyExistsException(data.customerNumber);
+    if (existCustomer)
+      throw new CustomerAlreadyExistsException(data.customerNumber);
 
-        const newCustomer = Customer.createCustomer({ ...data });
-        const customerCreated = await this.customerRepository.save(newCustomer);
+    const newCustomer = Customer.createCustomer({ ...data });
+    const customerCreated = await this.customerRepository.save(newCustomer);
 
-        return this.customerMapper.mapToCustomerResponseDTO(customerCreated);
-    }
+    return this.customerMapper.mapToCustomerResponseDTO(customerCreated);
+  }
 }
