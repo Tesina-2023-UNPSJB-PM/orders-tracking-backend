@@ -4,7 +4,7 @@ import {
   Address,
   AddressValues,
 } from '../../../shared/domain/entities/address.entity';
-import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.exception';
+import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
 import validator from 'validator';
 
 export interface CustomersValues {
@@ -70,26 +70,31 @@ export class Customer extends Entity<CustomerProps> {
   }
 
   public static createCustomer(values: CustomersValues, id?: number): Customer {
-    Customer.validateCustomerNumber(values);
-
-    Customer.validateDocumentNumber(values);
-
-    Customer.validateCustomerNaming(values);
+    Customer.validateDataBasicOfCustomer(values);
 
     const email = values.email ? new Email({ value: values.email }) : undefined;
-    const address = Address.createAddress(values.address);
+    const address = Address.createAddress(values.address, values.address.id);
     return new Customer(
       {
         customerNumber: values.customerNumber,
         documentNumber: values.documentNumber,
         firstName: values.firstName,
         lastName: values.lastName,
+        businessName: values.businessName,
         email: email,
         phones: values.phones,
         adress: address,
       },
       id,
     );
+  }
+
+  private static validateDataBasicOfCustomer(values: CustomersValues) {
+    Customer.validateCustomerNumber(values);
+
+    Customer.validateDocumentNumber(values);
+
+    Customer.validateCustomerNaming(values);
   }
 
   private static isValueEmpty(value: string) {

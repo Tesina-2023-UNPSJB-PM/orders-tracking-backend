@@ -1,4 +1,4 @@
-import { InvalidDomainException } from '../exceptions/invalidDomain.exception';
+import { InvalidDomainException } from '../exceptions/invalidDomain.error';
 import { ValueObject } from './valueObject';
 import validator from 'validator';
 

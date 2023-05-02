@@ -16,6 +16,8 @@ export class GetAllCustomers {
 
   async run(): Promise<CustomerResponseDTO[]> {
     const result = await this.customerRepository.getAll();
-    return result.map(this.customerMapper.mapToCustomerResponseDTO);
+    return result.map((customer) =>
+      this.customerMapper.mapToCustomerResponseDTO(customer),
+    );
   }
 }

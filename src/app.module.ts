@@ -31,6 +31,8 @@ const configPath = path.join(
         synchronize: false,
         autoLoadEntities: true,
         retryAttempts: 5,
+        logger: 'debug',
+        logNotifications: true,
       }),
       inject: [ConfigService],
     }),
