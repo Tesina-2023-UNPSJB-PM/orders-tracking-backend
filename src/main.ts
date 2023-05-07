@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+
+import { AppModule } from './app.module';
+
 import { InvalidDomainExceptionFilter } from './shared/infrastructure/filters/invalid-domain-exception.filter';
 import { PersistentExceptionFilter } from './shared/infrastructure/filters/persistent-exception.filter';
+import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
 
 function configDocumentApi(app: INestApplication) {
   const NAME_APP = 'Orders Tracking System';
@@ -25,6 +28,7 @@ function configDocumentApi(app: INestApplication) {
 function configExceptionFilters(app: INestApplication) {
   app.useGlobalFilters(new InvalidDomainExceptionFilter());
   app.useGlobalFilters(new PersistentExceptionFilter());
+  app.useGlobalFilters(new CustomerExceptionsFilter());
 }
 
 async function bootstrap() {

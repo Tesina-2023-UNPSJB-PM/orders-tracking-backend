@@ -27,11 +27,11 @@ export class Coordinates extends ValueObject<CoordinatesProps> {
         if (!lon) throw new InvalidDomainException('Longitude undefined');
 
         if (lat < -90 || lat > 90) {
-            throw new Error('Latitude should be between -90 and 90');
+            throw new InvalidDomainException('Latitude should be between -90 and 90');
         }
 
         if (lon < -180 || lon > 180) {
-            throw new Error('Longitude should be between -180 and 180');
+            throw new InvalidDomainException('Longitude should be between -180 and 180');
         }
 
         return new Coordinates({ latitude: lat, longitude: lon });
