@@ -1,7 +1,7 @@
 import { Address } from '../../../shared/domain/entities/address.entity';
 import { Customer } from '../../../customers/domain/entities/customer.entity';
 import { CustomerResponseDTO } from '../../../customers/dto/customer-resp.dto';
-import { AddressDTO } from '../../../customers/dto/address.dto';
+import { AddressDTO } from '../../../shared/dto/address.dto';
 
 export class CustomerMapper {
   public mapToCustomerResponseDTO(

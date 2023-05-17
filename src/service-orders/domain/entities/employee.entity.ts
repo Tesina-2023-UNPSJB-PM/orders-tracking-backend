@@ -1,14 +1,14 @@
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 import { Entity } from '../../../shared/domain/entities/entity';
 
-interface WorkerProps {
+interface EmployeeProps {
   recordNumber: string;
   firstName: string;
   lastName: string;
 }
 
-export class Worker extends Entity<WorkerProps> {
-  constructor(props: WorkerProps, id?: number) {
+export class Employee extends Entity<EmployeeProps> {
+  constructor(props: EmployeeProps, id?: number) {
     super(props, id);
   }
 
@@ -24,13 +24,13 @@ export class Worker extends Entity<WorkerProps> {
     return this.props.lastName;
   }
 
-  public static createWorker(values: WorkerProps, id?: number): Worker {
+  public static createEmployee(values: EmployeeProps, id?: number): Employee {
     if (!values.recordNumber)
-      throw new InvalidDomainException('Record number of worker undefined');
+      throw new InvalidDomainException('Record number of employee undefined');
 
     if (!values.firstName || !values.lastName)
-      throw new InvalidDomainException('Name of worker undefined');
+      throw new InvalidDomainException('Name of employee undefined');
 
-    return new Worker(values, id);
+    return new Employee(values, id);
   }
 }

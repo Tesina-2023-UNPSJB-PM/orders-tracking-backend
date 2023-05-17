@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
-import { ServiceOrdersService } from './application/service-orders.service';
-import { ServiceOrdersController } from './infrastructure/controller/service-orders.controller';
-import { CustomersModule } from 'src/customers/customers.module';
-import { UsersModule } from 'src/users/users.module';
+import { ServiceOrdersController } from './infrastructure/controller/serviceOrders.controller';
+import { CustomersModule } from '../customers/customers.module';
+import { CreateServiceOrder } from './application/useCases/createServiceOrder';
+import { ServiceOrderPersistence } from './infrastructure/persistence/implementation/serviceOrderPersistent';
+
+const ServiceOrderRepositoryProvider = {
+  provide: 'ServiceOrderRepository',
+  useClass: ServiceOrderPersistence,
+};
 
 @Module({
   controllers: [ServiceOrdersController],
-  providers: [ServiceOrdersService],
-  imports: [CustomersModule, UsersModule],
+  providers: [ServiceOrderRepositoryProvider, CreateServiceOrder],
+  imports: [CustomersModule],
 })
 export class ServiceOrdersModule {}

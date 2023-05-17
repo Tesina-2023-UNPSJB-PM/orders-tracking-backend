@@ -6,9 +6,9 @@ import {
 
 describe('OrderEnumsUtils', () => {
   it('get an existing order status', () => {
-    const status = OrderEnumsUtils.getOrderStatus('Pending');
+    const status = OrderEnumsUtils.getOrderStatus('PENDING');
 
-    expect(status).toEqual(OrderStatus.Pending);
+    expect(status).toEqual(OrderStatus.PENDING);
   });
 
   it('get undefined if the state of an order does not exist', () => {
@@ -18,9 +18,9 @@ describe('OrderEnumsUtils', () => {
   });
 
   it('get an existing order priority', () => {
-    const priorityOrder = OrderEnumsUtils.getOrderPriority('Low');
+    const priorityOrder = OrderEnumsUtils.getOrderPriority('HIGH');
 
-    expect(priorityOrder).toEqual(OrderPriority.Low);
+    expect(priorityOrder).toEqual(OrderPriority.HIGH);
   });
 
   it('get undefined if the priority of an order does not exist', () => {

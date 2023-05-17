@@ -5,7 +5,7 @@ import { CustomerMapper } from '../mappers/customerMapper';
 
 @Injectable()
 export class GetCustomerById {
-  mapper: CustomerMapper;
+  private mapper: CustomerMapper;
   constructor(
     @Inject('CustomerRepository')
     private customerRepository: CustomerRepository,

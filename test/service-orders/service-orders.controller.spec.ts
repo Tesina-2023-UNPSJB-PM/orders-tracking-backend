@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ServiceOrdersController } from '../../src/service-orders/infrastructure/controller/service-orders.controller';
+import { ServiceOrdersController } from '../../src/service-orders/infrastructure/controller/serviceOrders.controller';
 import { ServiceOrdersService } from '../../src/service-orders/application/service-orders.service';
 import { CustomersModule } from '../../src/customers/customers.module';
 import { UsersService } from '../../src/users/users.service';

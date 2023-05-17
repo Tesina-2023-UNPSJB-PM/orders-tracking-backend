@@ -1,13 +1,13 @@
 export enum OrderPriority {
-  Low = 'LOW',
-  Medium = 'MEDIUM',
-  High = 'HIGH',
+  LOW,
+  MEDIUM,
+  HIGH,
 }
 
 export enum OrderStatus {
-  Done = 'DONE',
-  Canceled = 'CANCELED',
-  Pending = 'PENDING',
+  DONE,
+  CANCELED,
+  PENDING,
 }
 
 export class OrderEnumsUtils {

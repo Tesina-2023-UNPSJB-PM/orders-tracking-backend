@@ -25,7 +25,13 @@ const CustomerRepositoryProvider = {
     UpdateCustomer,
     DeleteCustomer,
   ],
-  exports: [CreateCustomer, GetAllCustomers],
+  exports: [
+    CreateCustomer,
+    GetAllCustomers,
+    GetCustomerById,
+    UpdateCustomer,
+    DeleteCustomer,
+  ],
   imports: [TypeOrmModule.forFeature([CustomerPersistent, AddressPersistent])],
 })
 export class CustomersModule {}

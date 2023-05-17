@@ -3,29 +3,29 @@ import { ValueObject } from './valueObject';
 import validator from 'validator';
 
 interface EmailProps {
-    value: string;
+  value: string;
 }
 
 export class Email extends ValueObject<EmailProps> {
-    constructor(props: EmailProps) {
-        super(props);
-    }
+  constructor(props: EmailProps) {
+    super(props);
+  }
 
-    get value(): string {
-        return this.props.value;
-    }
+  get value(): string {
+    return this.props.value;
+  }
 
-    public static createEmail(value: string): Email {
-        const isValidEmail = Email.validateEmail(value);
-        if (!isValidEmail)
-            throw new InvalidDomainException('Invalid email address');
+  public static createEmail(value: string): Email {
+    const isValidEmail = Email.validateEmail(value);
+    if (!isValidEmail)
+      throw new InvalidDomainException('Invalid email address');
 
-        return new Email({ value });
-    }
+    return new Email({ value });
+  }
 
-    private static validateEmail(value: string) {
-        if (!value) false;
+  private static validateEmail(value: string) {
+    if (!value) false;
 
-        return validator.isEmail(value);
-    }
+    return validator.isEmail(value);
+  }
 }

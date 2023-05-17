@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AddressDTO } from './address.dto';
+import { AddressDTO } from '../../shared/dto/address.dto';
 
 export class CustomerRequestDTO {
   @ApiProperty({ required: false })
