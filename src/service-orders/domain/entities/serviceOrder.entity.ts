@@ -4,7 +4,6 @@ import { OrderPriority, OrderStatus } from '../enums/service-order-enums';
 import { OrderLocation } from './order-location.entity';
 import { Sector } from './sector.entity';
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
-import { Customer } from '../../../customers/domain/entities/customer.entity';
 import { Employee } from './employee.entity';
 
 export interface ServiceOrderProps {
@@ -16,7 +15,7 @@ export interface ServiceOrderProps {
   priority?: OrderPriority;
   executor?: Employee;
   assignedSector?: Sector;
-  customer?: Customer;
+  customerId: number;
   destination: OrderLocation;
   creationTime: Date;
   assignedTime: Date;
