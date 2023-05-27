@@ -13,7 +13,10 @@ export class GetCustomerById {
     this.mapper = new CustomerMapper();
   }
 
-  async run(id: number): Promise<CustomerResponseDTO | null> {
+  async run(id?: number): Promise<CustomerResponseDTO | null> {
+    if (!id) {
+      return null;
+    }
     const result = await this.customerRepository.getById(id);
     if (!result) return null;
 

@@ -22,6 +22,7 @@ export class CustomerMapper {
 
   private getAddressDTOOf(address: Address): AddressDTO {
     const result = new AddressDTO();
+    result.id = address.id;
     result.description = address.description;
     result.city = address.city;
     result.country = address.country;

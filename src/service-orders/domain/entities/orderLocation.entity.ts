@@ -1,7 +1,8 @@
 import { Entity } from '../../../shared/domain/entities/entity';
 import { Address } from '../../../shared/domain/entities/address.entity';
+
 export interface OrderLocationProps {
-  address: Address;
+  address?: Address;
   referenceInfo?: string;
 }
 
@@ -10,15 +11,19 @@ export class OrderLocation extends Entity<OrderLocationProps> {
     super(props, id);
   }
 
-  getValues(): OrderLocationProps {
-    return this.props;
+  get id(): number {
+    return this._id;
   }
 
-  get address(): Address {
+  get address(): Address | undefined {
     return this.props.address;
   }
 
-  public static createOrderLocation(props: OrderLocationProps, id?: number) {
+  get referenceInfo(): string | undefined {
+    return this.props.referenceInfo;
+  }
+
+  public static create(props: OrderLocationProps, id?: number) {
     return new OrderLocation(props, id);
   }
 }

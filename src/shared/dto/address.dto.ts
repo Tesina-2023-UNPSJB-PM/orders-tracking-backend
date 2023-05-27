@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class AddressDTO {
   @ApiProperty()
+  id?: number;
+  @ApiProperty()
   description: string;
   @ApiProperty()
   city: string;

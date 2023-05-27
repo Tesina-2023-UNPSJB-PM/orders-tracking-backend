@@ -8,30 +8,36 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CreateServiceOrder } from 'src/service-orders/application/useCases/createServiceOrder';
-import { ServiceOrderRequestDTO } from 'src/service-orders/dto/request/serviceOrderReq.dto';
+import { GetAllServiceOrder } from 'src/service-orders/application/useCases/getAllServiceOrder';
+import { GetServiceOrderById } from 'src/service-orders/application/useCases/getServiceOrderById';
+import { ServiceOrderRequestDTO } from 'src/service-orders/dto/serviceOrderReq.dto';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
-  constructor(private readonly createOrder: CreateServiceOrder) {}
+  constructor(
+    private createOrder: CreateServiceOrder,
+    private getAll: GetAllServiceOrder,
+    private getById: GetServiceOrderById,
+  ) {}
 
   @Post()
-  create(@Body() createServiceOrderDto: ServiceOrderRequestDTO) {
-    throw new Error('Method no defined');
+  create(@Body() req: ServiceOrderRequestDTO) {
+    return this.createOrder.run(req);
   }
 
   @Get()
   findAll() {
-    throw new Error('Method no defined');
+    return this.getAll.run();
   }
 
   @Patch()
-  update(@Body() updateServiceOrderDto: UpdateServiceOrderDto) {
+  update(@Body() updateServiceOrderDto: ServiceOrderRequestDTO) {
     throw new Error('Method no defined');
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    throw new Error('Method no defined');
+  findOne(@Param('id') id: number) {
+    return this.getById.run(id);
   }
 
   @Delete(':id')

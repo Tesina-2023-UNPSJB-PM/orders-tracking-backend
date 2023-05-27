@@ -2,8 +2,10 @@ import { ServiceOrder } from '../../../../service-orders/domain/entities/service
 import { ServiceOrderRepository } from '../../../../service-orders/domain/repositories/serviceOrderRepository';
 
 export class ServiceOrderPersistence implements ServiceOrderRepository {
-  getAll(): Promise<ServiceOrder[]> {
-    throw new Error('Method not implemented.');
+  private db: ServiceOrder[] = [];
+
+  async getAll(): Promise<ServiceOrder[]> {
+    return this.db;
   }
 
   getById(id: number): Promise<ServiceOrder | null> {
@@ -14,8 +16,19 @@ export class ServiceOrderPersistence implements ServiceOrderRepository {
     throw new Error('Method not implemented.');
   }
 
-  save(customer: ServiceOrder): Promise<ServiceOrder> {
-    throw new Error('Method not implemented.');
+  async save(entity: ServiceOrder): Promise<ServiceOrder> {
+    if (!entity) {
+      throw new Error('Error al persistir entidad. Entidad nula');
+    }
+
+    const entitySaved = ServiceOrder.create(
+      entity.getValues(),
+      this.db.length + 1,
+    );
+
+    this.db.push(entitySaved);
+
+    return entitySaved;
   }
 
   update(customer: ServiceOrder): Promise<ServiceOrder> {

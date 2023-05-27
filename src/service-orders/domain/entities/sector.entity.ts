@@ -1,5 +1,6 @@
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
 import { Entity } from '../../../shared/domain/entities/entity';
+import validator  from 'validator'
 
 interface SectorProps {
   name: string;
@@ -7,8 +8,8 @@ interface SectorProps {
 }
 
 export class Sector extends Entity<SectorProps> {
-  private constructor(props: SectorProps) {
-    super(props);
+  private constructor(props: SectorProps, id?: number) {
+    super(props, id);
   }
 
   get id(): number {
@@ -23,9 +24,10 @@ export class Sector extends Entity<SectorProps> {
     return this.props.description;
   }
 
-  public static createSector(value: string): Sector {
-    if (!value) throw new InvalidDomainException('Name of sector undefined');
+  public static create(props: SectorProps, id?: number): Sector {
+    if (validator.isEmpty(props.name, { ignore_whitespace: true }))
+      throw new InvalidDomainException('Name of sector undefined');
 
-    return new Sector({ name: value });
+    return new Sector(props, id);
   }
 }

@@ -2,5 +2,5 @@ import { CrudRepository } from '../../../shared/domain/repositories/crudReposito
 import { Sector } from '../entities/sector.entity';
 
 export interface SectorRepository extends CrudRepository<Sector> {
-  getByName: (name: string) => Promise<Sector>;
+  getByName: (name: string) => Promise<Sector | null>;
 }

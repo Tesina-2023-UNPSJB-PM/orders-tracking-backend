@@ -54,7 +54,7 @@ export class Address extends Entity<AddressProps> {
     return this.props.location;
   }
 
-  public static createAddress(values: AddressValues, id?: number): Address {
+  public static create(values: AddressValues, id?: number): Address {
     // Integrity and consistency validation
     if (!values) throw new InvalidDomainException('Address values undefined');
 

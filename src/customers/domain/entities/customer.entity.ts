@@ -73,7 +73,7 @@ export class Customer extends Entity<CustomerProps> {
     Customer.validateDataBasicOfCustomer(values);
 
     const email = values.email ? new Email({ value: values.email }) : undefined;
-    const address = Address.createAddress(values.address, values.address.id);
+    const address = Address.create(values.address, values.address.id);
     return new Customer(
       {
         customerNumber: values.customerNumber,

@@ -5,11 +5,16 @@ interface EmployeeProps {
   recordNumber: string;
   firstName: string;
   lastName: string;
+  sectorId: number;
 }
 
 export class Employee extends Entity<EmployeeProps> {
   constructor(props: EmployeeProps, id?: number) {
     super(props, id);
+  }
+
+  get id(): number {
+    return this._id;
   }
 
   get recordNumber(): string {
@@ -24,7 +29,7 @@ export class Employee extends Entity<EmployeeProps> {
     return this.props.lastName;
   }
 
-  public static createEmployee(values: EmployeeProps, id?: number): Employee {
+  public static create(values: EmployeeProps, id?: number): Employee {
     if (!values.recordNumber)
       throw new InvalidDomainException('Record number of employee undefined');
 

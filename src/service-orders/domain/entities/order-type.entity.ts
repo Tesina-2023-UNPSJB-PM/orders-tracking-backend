@@ -8,8 +8,8 @@ export interface OrderTypeProps {
 }
 
 export class OrderType extends Entity<OrderTypeProps> {
-  private constructor(props: OrderTypeProps) {
-    super(props);
+  private constructor(props: OrderTypeProps, id?: number) {
+    super(props, id);
   }
 
   get id(): number {
@@ -24,10 +24,10 @@ export class OrderType extends Entity<OrderTypeProps> {
     return this.props.description;
   }
 
-  public static createOrderType(props: OrderTypeProps): OrderType {
+  public static create(props: OrderTypeProps, id?: number): OrderType {
     if (validator.isEmpty(props.name, { ignore_whitespace: true }))
       throw new InvalidDomainException('Name of type order undefined');
 
-    return new OrderType(props);
+    return new OrderType(props, id);
   }
 }
