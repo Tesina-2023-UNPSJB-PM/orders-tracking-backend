@@ -3,7 +3,7 @@ import {
   Address,
   AddressValues,
 } from '../../../shared/domain/entities/address.entity';
-import { AddressPersistent } from '../persistence/entitiesDB/addressPersistent';
+import { AddressPersistent } from '../../../shared/infrastructure/entitiesDB/addressPersistent';
 import { CustomerPersistent } from '../persistence/entitiesDB/customerPersistent';
 
 export class CustomerPersistentMapper {

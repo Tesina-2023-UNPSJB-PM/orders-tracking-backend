@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
-import { ServiceOrderRequestDTO } from 'src/service-orders/dto/serviceOrderReq.dto';
+import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
 import { ServiceOrderFactory } from '../factories/serviceOrderFactory';
-
 @Injectable()
 export class CreateServiceOrder {
   constructor(
@@ -11,7 +10,7 @@ export class CreateServiceOrder {
     private serviceOrderFactory: ServiceOrderFactory,
   ) {}
 
-  async run(request: ServiceOrderRequestDTO): Promise<number> {
+  async run(request: ServiceOrderRequest): Promise<number> {
     // Mapping request from dto to entity
     const newServiceOrder = await this.serviceOrderFactory.createEntity(
       request,

@@ -2,7 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { OrderLocationDTO } from './orderLocation.dto';
 import { OrderExecutionDTO } from './orderExecution.dto';
 
-export class ServiceOrderRequestDTO {
+export class ServiceOrderRequest {
+  @ApiProperty()
+  id?: number;
   @ApiProperty()
   number?: string;
   @ApiProperty()

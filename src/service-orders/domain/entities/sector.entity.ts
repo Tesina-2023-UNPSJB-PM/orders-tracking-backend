@@ -1,6 +1,6 @@
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
 import { Entity } from '../../../shared/domain/entities/entity';
-import validator  from 'validator'
+import validator from 'validator';
 
 interface SectorProps {
   name: string;

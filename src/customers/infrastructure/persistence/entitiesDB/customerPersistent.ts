@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { AddressPersistent } from './addressPersistent';
+import { AddressPersistent } from '../../../../shared/infrastructure/entitiesDB/addressPersistent';
 
 @Entity({ name: 'CUSTOMER' })
 export class CustomerPersistent {

@@ -29,6 +29,10 @@ export class Employee extends Entity<EmployeeProps> {
     return this.props.lastName;
   }
 
+  get sectorId(): number {
+    return this.props.sectorId;
+  }
+
   public static create(values: EmployeeProps, id?: number): Employee {
     if (!values.recordNumber)
       throw new InvalidDomainException('Record number of employee undefined');

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
-import { ServiceOrderResponseDTO } from 'src/service-orders/dto/serviceOrderRes.dto';
+import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { MapperServiceOrder } from '../mappers/mapperServiceOrder';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class GetAllServiceOrder {
     this.mapper = new MapperServiceOrder();
   }
 
-  async run(): Promise<ServiceOrderResponseDTO[]> {
+  async run(): Promise<ServiceOrderResponse[]> {
     const result = await this.serviceOrderRepo.getAll();
 
     return result.map((order) => this.mapper.mapToDto(order));

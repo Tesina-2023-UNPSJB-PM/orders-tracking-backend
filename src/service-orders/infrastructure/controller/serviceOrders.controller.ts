@@ -10,18 +10,21 @@ import {
 import { CreateServiceOrder } from 'src/service-orders/application/useCases/createServiceOrder';
 import { GetAllServiceOrder } from 'src/service-orders/application/useCases/getAllServiceOrder';
 import { GetServiceOrderById } from 'src/service-orders/application/useCases/getServiceOrderById';
-import { ServiceOrderRequestDTO } from 'src/service-orders/dto/serviceOrderReq.dto';
+import { UpdateServiceOrder } from 'src/service-orders/application/useCases/updateServiceOrder';
+import { FindByIDParam } from 'src/service-orders/dto/findByIdParam.dto';
+import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
   constructor(
     private createOrder: CreateServiceOrder,
+    private updateOrder: UpdateServiceOrder,
     private getAll: GetAllServiceOrder,
     private getById: GetServiceOrderById,
   ) {}
 
   @Post()
-  create(@Body() req: ServiceOrderRequestDTO) {
+  create(@Body() req: ServiceOrderRequest) {
     return this.createOrder.run(req);
   }
 
@@ -31,12 +34,13 @@ export class ServiceOrdersController {
   }
 
   @Patch()
-  update(@Body() updateServiceOrderDto: ServiceOrderRequestDTO) {
-    throw new Error('Method no defined');
+  update(@Body() req: ServiceOrderRequest) {
+    return this.updateOrder.run(req);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param() paramId: FindByIDParam) {
+    const id = parseInt(paramId.id, 10);
     return this.getById.run(id);
   }
 

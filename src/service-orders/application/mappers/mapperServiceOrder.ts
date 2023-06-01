@@ -1,15 +1,15 @@
-import { OrderType } from 'src/service-orders/domain/entities/order-type.entity';
+import { OrderType } from 'src/service-orders/domain/entities/orderType.entity';
 import { ServiceOrder } from 'src/service-orders/domain/entities/serviceOrder.entity';
 import { OrderTypeDTO } from 'src/service-orders/dto/orderType.dto';
-import { ServiceOrderResponseDTO } from 'src/service-orders/dto/serviceOrderRes.dto';
+import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { OrderLocationDTO } from '../../dto/orderLocation.dto';
 import { OrderLocation } from 'src/service-orders/domain/entities/orderLocation.entity';
 import { OrderExecution } from 'src/service-orders/domain/entities/orderExecution.entity';
 import { OrderExecutionDTO } from 'src/service-orders/dto/orderExecution.dto';
 
 export class MapperServiceOrder {
-  mapToDto(from: ServiceOrder): ServiceOrderResponseDTO {
-    const result = new ServiceOrderResponseDTO();
+  mapToDto(from: ServiceOrder): ServiceOrderResponse {
+    const result = new ServiceOrderResponse();
     const values = from.getValues();
     result.id = from.id;
     result.number = values.number;

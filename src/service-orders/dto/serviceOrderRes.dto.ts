@@ -3,7 +3,7 @@ import { OrderTypeDTO } from './orderType.dto';
 import { OrderExecutionDTO } from './orderExecution.dto';
 import { OrderLocationDTO } from './orderLocation.dto';
 
-export class ServiceOrderResponseDTO {
+export class ServiceOrderResponse {
   @ApiProperty()
   id?: number;
   @ApiProperty()

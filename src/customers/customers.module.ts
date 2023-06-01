@@ -5,7 +5,7 @@ import { CustomersController } from './infrastructure/controllers/customers.cont
 import { CreateCustomer } from './application/useCases/createCustomer';
 import { GetAllCustomers } from './application/useCases/getAllCustomers';
 import { CustomerPersistent } from './infrastructure/persistence/entitiesDB/customerPersistent';
-import { AddressPersistent } from './infrastructure/persistence/entitiesDB/addressPersistent';
+import { AddressPersistent } from '../shared/infrastructure/entitiesDB/addressPersistent';
 import { CustomerRepositoryPersistent } from './infrastructure/persistence/implementation/customerRepositoryPersistent';
 import { GetCustomerById } from './application/useCases/getCustomerById';
 import { DeleteCustomer } from './application/useCases/deleteCustomer';

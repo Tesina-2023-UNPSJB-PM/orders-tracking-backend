@@ -1,5 +1,5 @@
 import { Entity } from '../../../shared/domain/entities/entity';
-import { OrderType } from './order-type.entity';
+import { OrderType } from './orderType.entity';
 import { OrderPriority, OrderStatus } from '../enums/service-order-enums';
 import { OrderLocation } from './orderLocation.entity';
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
