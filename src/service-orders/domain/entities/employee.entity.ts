@@ -1,11 +1,12 @@
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 import { Entity } from '../../../shared/domain/entities/entity';
+import { Sector } from './sector.entity';
 
 interface EmployeeProps {
   recordNumber: string;
   firstName: string;
   lastName: string;
-  sectorId: number;
+  sector: Sector;
 }
 
 export class Employee extends Entity<EmployeeProps> {
@@ -29,8 +30,8 @@ export class Employee extends Entity<EmployeeProps> {
     return this.props.lastName;
   }
 
-  get sectorId(): number {
-    return this.props.sectorId;
+  get sector(): Sector {
+    return this.props.sector;
   }
 
   public static create(values: EmployeeProps, id?: number): Employee {

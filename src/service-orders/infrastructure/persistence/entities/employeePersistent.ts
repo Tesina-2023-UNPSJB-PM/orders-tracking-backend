@@ -1,9 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { SectorPersistent } from './sectorPersistent';
 
 @Entity('EMPLOYEE')
 export class EmployeePersistent {
   @PrimaryGeneratedColumn()
   id?: number;
+
   @Column({
     name: 'record_number',
     type: 'varchar',
@@ -11,6 +19,7 @@ export class EmployeePersistent {
     nullable: true,
   })
   recordNumber: string;
+
   @Column({
     name: 'first_name',
     type: 'varchar',
@@ -18,6 +27,7 @@ export class EmployeePersistent {
     nullable: false,
   })
   firstName: string;
+
   @Column({
     name: 'last_name',
     type: 'varchar',
@@ -25,10 +35,8 @@ export class EmployeePersistent {
     nullable: false,
   })
   lastName: string;
-  @Column({
-    name: 'sector_id',
-    type: 'integer',
-    nullable: false,
-  })
-  sectorId: number;
+
+  @ManyToOne(() => SectorPersistent, { eager: true })
+  @JoinColumn({ name: 'sector_id' })
+  sector: SectorPersistent;
 }

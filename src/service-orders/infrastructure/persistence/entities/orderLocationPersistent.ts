@@ -11,9 +11,9 @@ import {
 export class OrderLocationPersistent {
   @PrimaryGeneratedColumn()
   id?: number;
-  @ManyToOne(() => AddressPersistent)
+  @ManyToOne(() => AddressPersistent, { nullable: false, eager: true })
   @JoinColumn({ name: 'address_id' })
-  address: AddressPersistent;
+  address?: AddressPersistent;
   @Column({ type: 'varchar', length: 250, nullable: true })
   referenceInfo?: string;
 }

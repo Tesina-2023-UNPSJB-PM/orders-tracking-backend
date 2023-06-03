@@ -23,23 +23,23 @@ export class ServiceOrderPersistent {
   number?: string;
   @Column('varchar', { length: 250, nullable: true })
   description?: string;
-  @ManyToOne(() => OrderTypePersistent)
+  @ManyToOne(() => OrderTypePersistent, { nullable: false, eager: true })
   @JoinColumn({ name: 'type_id' })
-  type: OrderTypePersistent;
+  type?: OrderTypePersistent;
   @Column({ type: 'enum', enum: OrderStatus })
   status?: OrderStatus;
   @Column({ type: 'enum', enum: OrderPriority })
   priority?: OrderPriority;
   @Column('integer')
   customerId?: number;
-  @OneToOne(() => OrderLocationPersistent)
+  @OneToOne(() => OrderLocationPersistent, { eager: true })
   @JoinColumn({ name: 'order_location_id' })
   destination?: OrderLocationPersistent;
-  @OneToOne(() => OrderExecutionPersistent)
+  @OneToOne(() => OrderExecutionPersistent, { eager: true })
   @JoinColumn({ name: 'excetution_id' })
   execution?: OrderExecutionPersistent;
   @CreateDateColumn({ name: 'creationTime' })
   creationTime?: Date;
-  @Column({ type: 'json' })
+  @Column({ type: 'json', nullable: true })
   detail?: object;
 }

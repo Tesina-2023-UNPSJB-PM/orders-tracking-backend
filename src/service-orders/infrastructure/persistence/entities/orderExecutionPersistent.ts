@@ -14,16 +14,16 @@ export class OrderExecutionPersistent {
   id?: number;
   @Column({ type: 'varchar', nullable: true })
   observations?: string;
-  @ManyToOne(() => EmployeePersistent)
+  @ManyToOne(() => EmployeePersistent, { eager: true })
   @JoinColumn({ name: 'employee_id' })
   executor?: EmployeePersistent;
-  @ManyToOne(() => SectorPersistent)
+  @ManyToOne(() => SectorPersistent, { eager: true })
   @JoinColumn({ name: 'sector_id' })
   assignedSector?: SectorPersistent;
   @Column({ name: 'assigned_time', type: 'timestamp' })
   assignedTime?: Date;
   @Column({ name: 'estimated_resolution_time', type: 'timestamp' })
   estimatedResolutionTime?: Date;
-  @Column({ name: 'resolution_time', type: 'timestamp' })
+  @Column({ name: 'resolution_time', type: 'timestamp', nullable: true })
   resolutionTime?: Date;
 }
