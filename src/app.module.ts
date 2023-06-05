@@ -4,12 +4,20 @@ import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import * as path from 'path';
+
+const configPath = path.join(
+  process.cwd(),
+  'config',
+  'env',
+  `${process.env.NODE_ENV?.trim()}.env`,
+);
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `${process.cwd()}/config/env/${process.env.NODE_ENV}.env`,
+      envFilePath: configPath,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -22,6 +30,9 @@ import { DataSource } from 'typeorm';
         database: configService.get<string>('DB_NAME'),
         synchronize: true,
         autoLoadEntities: true,
+        retryAttempts: 5,
+        logger: 'debug',
+        logNotifications: true,
       }),
       inject: [ConfigService],
     }),
