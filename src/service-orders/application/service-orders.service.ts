@@ -9,7 +9,7 @@ import { DB_TYPES } from '../db/order-types-db.const';
 import { DB_ORDERS } from '../db/orders-db.const';
 import { OrderEnumsUtils } from '../domain/enums/service-order-enums';
 import { OrderLocation } from '../domain/order-location.entity';
-
+import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 @Injectable()
 export class ServiceOrdersService {
   // Futuras tablas de la BD
@@ -47,7 +47,7 @@ export class ServiceOrdersService {
     return newOrder;
   }
 
-  findAll() {
+  findAll(filters: FindAllServiceOrderFilters = {}) {
     return this.dbOrders;
   }
 
@@ -106,4 +106,11 @@ export class ServiceOrdersService {
 
     return result;
   }
+}
+
+export interface FindAllServiceOrderFilters {
+  employeeId?: string;
+  customerId?: string;
+  statusCode?: OrderStatus;
+  creationDate?: Date;
 }

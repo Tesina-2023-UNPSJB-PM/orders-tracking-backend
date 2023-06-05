@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ServiceOrdersService } from '../application/service-orders.service';
 import { CreateServiceOrderDto } from '../dto/create-service-order.dto';
 import { UpdateServiceOrderDto } from '../dto/update-service-order.dto';
+import { OrderStatus } from '../domain/enums/service-order-enums';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
@@ -21,8 +23,19 @@ export class ServiceOrdersController {
   }
 
   @Get()
-  findAll() {
-    return this.serviceOrdersService.findAll();
+  findAll(
+    @Query('employeeId') employeeId: string = '',
+    @Query('customerId') customerId: string = '',
+    @Query('statusCode') statusCode?: OrderStatus,
+    @Query('creationDate') creationDate: string = '',
+  ) {
+    console.log('customerId:', customerId);
+    return this.serviceOrdersService.findAll({
+      employeeId,
+      customerId,
+      statusCode,
+      creationDate: new Date(creationDate),
+    });
   }
 
   @Patch()
