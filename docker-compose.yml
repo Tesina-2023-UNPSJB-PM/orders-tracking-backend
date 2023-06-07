@@ -29,7 +29,7 @@ services:
       - serverDB
 
   app-back:
-    image: localhost:5000/orders-tracking-back:latest
+    image: orders-tracking-back:latest
     container_name: orders-service-back  
     restart: always
     ports:
