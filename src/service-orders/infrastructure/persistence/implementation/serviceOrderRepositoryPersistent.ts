@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 import { ServiceOrder } from '../../../domain/entities/serviceOrder.entity';
-import { ServiceOrderRepository } from '../../../domain/repositories/serviceOrderRepository';
+import {
+  FindAllServiceOrderFilters,
+  ServiceOrderRepository,
+} from '../../../domain/repositories/serviceOrderRepository';
 import { ServiceOrderPersistent } from '../entities/serviceOrderPersistent';
 import { MapperServiceOrderPersistent } from '../mappers/mapperServiceOrderPersistent';
+import { getDateInterval } from 'src/shared/infrastructure/utils/date.utils';
 
 @Injectable()
 export class ServiceOrderRepositoryPersistence
@@ -39,6 +43,27 @@ export class ServiceOrderRepositoryPersistence
     return resultDB
       ? this.mapperServiceOrder.mapToServiceOrder(resultDB)
       : null;
+  }
+
+  async getByFilters({
+    customerId,
+    employeeId,
+    statusCode,
+    creationDate,
+  }: FindAllServiceOrderFilters): Promise<ServiceOrder[]> {
+    const { fromDate, toDate } = getDateInterval(creationDate);
+    
+
+    return (
+      await this.repository.find({
+        where: {
+          customerId,
+          execution: { executor: { id: employeeId } },
+          status: statusCode,
+          creationTime: Between(fromDate, toDate),
+        },
+      })
+    ).map((row) => this.mapperServiceOrder.mapToServiceOrder(row));
   }
 
   save: (entity: ServiceOrder) => Promise<ServiceOrder>;

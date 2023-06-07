@@ -9,6 +9,13 @@ import { InvalidDomainExceptionFilter } from './shared/infrastructure/filters/in
 import { PersistentExceptionFilter } from './shared/infrastructure/filters/persistent-exception.filter';
 import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
 
+/**
+ * This is required to retrieves the correct dates when querying the database.
+ */
+function setTimezone() {
+  process.env.TZ = 'Etc/Universal';
+}
+
 function configDocumentApi(app: INestApplication) {
   const NAME_APP = 'Orders Tracking System';
   const DESCRIPTION_APP = 'Sistema para tracking geolocation';
@@ -32,6 +39,7 @@ function configExceptionFilters(app: INestApplication) {
 }
 
 async function bootstrap() {
+  setTimezone();
   const app = await NestFactory.create(AppModule, {
     logger: ['verbose'],
   });
