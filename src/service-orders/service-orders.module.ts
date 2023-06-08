@@ -18,6 +18,7 @@ import { EmployeePersistent } from './infrastructure/persistence/entities/employ
 import { OrderTypePersistent } from './infrastructure/persistence/entities/orderTypePersistent';
 import { OrderExecutionPersistent } from './infrastructure/persistence/entities/orderExecutionPersistent';
 import { OrderLocationPersistent } from './infrastructure/persistence/entities/orderLocationPersistent';
+import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
 
 const repositoriesProvider = [
   {
@@ -46,6 +47,7 @@ const repositoriesProvider = [
     UpdateServiceOrder,
     GetAllServiceOrder,
     GetServiceOrderById,
+    GetByFilterServiceOrder,
     OrderExecutionFactory,
     ServiceOrderFactory,
   ],

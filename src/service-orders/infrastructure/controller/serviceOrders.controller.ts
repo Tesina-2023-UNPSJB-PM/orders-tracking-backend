@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CreateServiceOrder } from 'src/service-orders/application/useCases/createServiceOrder';
 import { GetAllServiceOrder } from 'src/service-orders/application/useCases/getAllServiceOrder';
+import { GetByFilterServiceOrder } from 'src/service-orders/application/useCases/getByFilterServiceOrder';
 import { GetServiceOrderById } from 'src/service-orders/application/useCases/getServiceOrderById';
 import { UpdateServiceOrder } from 'src/service-orders/application/useCases/updateServiceOrder';
+import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { FindByIDParam } from 'src/service-orders/dto/findByIdParam.dto';
 import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
 
@@ -19,7 +22,7 @@ export class ServiceOrdersController {
   constructor(
     private createOrder: CreateServiceOrder,
     private updateOrder: UpdateServiceOrder,
-    private getAll: GetAllServiceOrder,
+    private getByFilter: GetByFilterServiceOrder,
     private getById: GetServiceOrderById,
   ) {}
 
@@ -29,8 +32,18 @@ export class ServiceOrdersController {
   }
 
   @Get()
-  findAll() {
-    return this.getAll.run();
+  findAll(
+    @Query('employeeId') employeeId: number,
+    @Query('customerId') customerId: number,
+    @Query('statusCode') statusCode?: OrderStatus,
+    @Query('creationDate') creationDate: string = '',
+  ) {
+    return this.getByFilter.run({
+      employeeId,
+      customerId,
+      statusCode,
+      creationDate: creationDate ? new Date(creationDate) : undefined,
+    });
   }
 
   @Patch()
