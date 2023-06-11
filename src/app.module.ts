@@ -16,7 +16,6 @@ const configPath = path.join(
 
 @Module({
   imports: [
-    MasterDataModule,
     ConfigModule.forRoot({
       envFilePath: configPath,
       isGlobal: true,
@@ -41,6 +40,7 @@ const configPath = path.join(
     ServiceOrdersModule,
     UsersModule,
     CustomersModule,
+    MasterDataModule,
   ],
 })
 export class AppModule {}

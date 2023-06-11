@@ -28,6 +28,12 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
+  /**
+   * This method returns all master data.
+   *
+   * @return {*}  {Promise<MasterDataResponse>}
+   * @memberof MasterDataRepositoryPersistent
+   */
   async getMasterData(): Promise<MasterDataResponse> {
     return Promise.all([
       this.getServiceOrderStates(),
