@@ -1,3 +1,4 @@
+import { MasterDataModule } from './master-data/master-data.module';
 import { Module } from '@nestjs/common';
 import { ServiceOrdersModule } from './service-orders/service-orders.module';
 import { UsersModule } from './users/users.module';
@@ -39,6 +40,7 @@ const configPath = path.join(
     ServiceOrdersModule,
     UsersModule,
     CustomersModule,
+    MasterDataModule,
   ],
 })
 export class AppModule {}
