@@ -30,9 +30,20 @@ services:
 
   app-back:
     image: orders-tracking-back:latest
-    container_name: orders-service-back  
+    container_name: ms1 
     restart: always
     ports:
       - 8085:8085
     depends_on:
-      - serverDB       
+      - serverDB
+
+  proxy-server-web:
+    image: orders-tracking-web
+    container_name: orders-tracking-front
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - pgadmin
+      - app-back
+                   

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between, Repository, TypeORMError } from 'typeorm';
 
 import { ServiceOrder } from '../../../domain/entities/serviceOrder.entity';
 import {
@@ -24,13 +24,13 @@ export class ServiceOrderRepositoryPersistence
   }
 
   async getAll(): Promise<ServiceOrder[]> {
-    return (await this.repository.find()).map((row) =>
-      this.mapperServiceOrder.mapToServiceOrder(row),
+    return (await this.repository.find({ where: { removed: false } })).map(
+      (row) => this.mapperServiceOrder.mapToServiceOrder(row),
     );
   }
 
   async getById(id: number): Promise<ServiceOrder | null> {
-    const resultDB = await this.repository.findOneBy({ id });
+    const resultDB = await this.repository.findOneBy({ id, removed: false });
 
     return resultDB
       ? this.mapperServiceOrder.mapToServiceOrder(resultDB)
@@ -38,7 +38,10 @@ export class ServiceOrderRepositoryPersistence
   }
 
   async getByServiceOrderNumber(number: string): Promise<ServiceOrder | null> {
-    const resultDB = await this.repository.findOneBy({ number });
+    const resultDB = await this.repository.findOneBy({
+      number,
+      removed: false,
+    });
 
     return resultDB
       ? this.mapperServiceOrder.mapToServiceOrder(resultDB)
@@ -61,18 +64,39 @@ export class ServiceOrderRepositoryPersistence
           execution: { executor: { id: employeeId } },
           status: statusCode,
           creationTime: Between(fromDate, toDate),
+          removed: false,
         },
       })
     ).map((row) => this.mapperServiceOrder.mapToServiceOrder(row));
   }
 
-  save: (entity: ServiceOrder) => Promise<ServiceOrder>;
+  async save(entity: ServiceOrder): Promise<ServiceOrder> {
+    const orderPersistent =
+      this.mapperServiceOrder.mapToServiceOrderPersistent(entity);
+    const orderSaved = await this.repository.save(orderPersistent);
 
-  update(customer: ServiceOrder): Promise<ServiceOrder> {
-    return this.save(customer);
+    return this.mapperServiceOrder.mapToServiceOrder(orderSaved);
   }
 
-  delete(id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update(entity: ServiceOrder): Promise<ServiceOrder> {
+    const orderPersistent = await this.repository.findOneBy({
+      id: entity.id,
+      removed: false,
+    });
+    if (!orderPersistent) {
+      throw new TypeORMError(
+        `Service order with id ${entity.id} does not exist`,
+      );
+    }
+
+    return this.save(entity);
+  }
+
+  async delete(id: number): Promise<void> {
+    const orderPersistent = await this.repository.findOneBy({ id });
+    if (orderPersistent) {
+      orderPersistent.removed = true;
+      this.repository.save(orderPersistent);
+    }
   }
 }

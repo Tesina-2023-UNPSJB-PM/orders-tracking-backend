@@ -42,4 +42,6 @@ export class ServiceOrderPersistent {
   creationTime?: Date;
   @Column({ type: 'json', nullable: true })
   detail?: object;
+  @Column({ type: 'boolean', default: false })
+  removed: boolean;
 }
