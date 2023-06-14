@@ -11,7 +11,7 @@ import { MasterDataEmployeeDTO } from 'src/master-data/dto/master-data-employee.
 import { MasterDataOrderStatusDTO } from 'src/master-data/dto/master-data-order-status.dto';
 import { MasterDataOrderTypeDTO } from 'src/master-data/dto/master-data-order-type.dto';
 import { MasterDataResponse } from 'src/master-data/dto/master-data-resp.dto';
-import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
+import { OrderStates, OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { EmployeePersistent } from 'src/service-orders/infrastructure/persistence/entities/employeePersistent';
 import { OrderTypePersistent } from 'src/service-orders/infrastructure/persistence/entities/orderTypePersistent';
 import { DataSource } from 'typeorm';
@@ -83,7 +83,7 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
 
   private getServiceOrderStates(): Promise<MasterDataOrderStatusDTO[]> {
     return Promise.resolve(
-      this.masterDataStatesMapper.mapToStatesResponseDTO(Object.values(OrderStatus))
+      OrderStates
     );
   }
 }

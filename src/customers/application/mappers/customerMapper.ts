@@ -1,6 +1,6 @@
-import { Address } from '../../../shared/domain/entities/address.entity';
 import { Customer } from '../../../customers/domain/entities/customer.entity';
 import { CustomerResponseDTO } from '../../../customers/dto/customer-resp.dto';
+import { Address } from '../../../shared/domain/entities/address.entity';
 import { AddressDTO } from '../../../shared/dto/address.dto';
 
 export class CustomerMapper {
@@ -16,7 +16,7 @@ export class CustomerMapper {
     result.email = customerEntity.email?.value;
     result.phones = customerEntity.phones;
     result.address = this.getAddressDTOOf(customerEntity.address);
-
+    
     return result;
   }
 
@@ -32,4 +32,6 @@ export class CustomerMapper {
     result.longitude = address.location.longitude;
     return result;
   }
+
+  
 }

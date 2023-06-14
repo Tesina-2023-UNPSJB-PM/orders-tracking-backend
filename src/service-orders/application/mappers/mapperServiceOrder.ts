@@ -6,6 +6,11 @@ import { OrderLocationDTO } from '../../dto/orderLocation.dto';
 import { OrderLocation } from 'src/service-orders/domain/entities/orderLocation.entity';
 import { OrderExecution } from 'src/service-orders/domain/entities/orderExecution.entity';
 import { OrderExecutionDTO } from 'src/service-orders/dto/orderExecution.dto';
+import {
+  OrderStates,
+  OrderStatus,
+} from 'src/service-orders/domain/enums/service-order-enums';
+import { OrderStateDTO } from 'src/service-orders/dto/orderState.dto';
 
 export class MapperServiceOrder {
   mapToDto(from: ServiceOrder): ServiceOrderResponse {
@@ -16,7 +21,7 @@ export class MapperServiceOrder {
     result.description = values.description;
     result.creationTime = values.creationTime;
     result.priority = values.priority;
-    result.status = values.status;
+    result.status = this.getStatusDTOOf(values.status as OrderStatus);
     result.type = this.getTypeDto(values.type);
     result.customerId = values.customerId;
     result.destination = this.getOrderLocationDto(values.destination);
@@ -67,5 +72,9 @@ export class MapperServiceOrder {
       result.resolutionTime = execution.resolutionTime;
     }
     return result;
+  }
+
+  private getStatusDTOOf(status: OrderStatus): OrderStateDTO | undefined {
+    return OrderStates.find(({ code }) => code == status);
   }
 }
