@@ -6,16 +6,18 @@ export class MasterDataCustomerMapper {
   public mapToCustomerResponseDTO({
     customer_number: customerNumber,
     document_number: documentNumber,
-    first_name: firtsName,
+    first_name: firstName,
     last_name: lastName,
     business_name: businessName,
     email,
     phones,
+    id
   }: any): MasterDataCustomerDTO {
     return {
+      id,
       customerNumber,
       documentNumber,
-      firtsName,
+      firstName,
       lastName,
       businessName,
       email,

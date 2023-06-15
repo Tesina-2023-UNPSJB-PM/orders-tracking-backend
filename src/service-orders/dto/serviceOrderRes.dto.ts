@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { OrderTypeDTO } from './orderType.dto';
 import { OrderExecutionDTO } from './orderExecution.dto';
 import { OrderLocationDTO } from './orderLocation.dto';
+import { OrderStateDTO } from './orderState.dto';
 
 export class ServiceOrderResponse {
   @ApiProperty()
@@ -13,7 +14,7 @@ export class ServiceOrderResponse {
   @ApiProperty()
   type?: OrderTypeDTO;
   @ApiProperty()
-  status?: string;
+  status?: OrderStateDTO;
   @ApiProperty()
   priority?: string;
   @ApiProperty()
