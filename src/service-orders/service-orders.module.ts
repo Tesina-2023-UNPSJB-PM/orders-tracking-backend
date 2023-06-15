@@ -20,6 +20,7 @@ import { OrderTypeRepositoryPersistent } from './infrastructure/persistence/impl
 import { SectorRepositoryPersistent } from './infrastructure/persistence/implementation/sectorRepositoryPersistent';
 import { ServiceOrderRepositoryPersistence } from './infrastructure/persistence/implementation/serviceOrderRepositoryPersistent';
 import { DeleteServiceOrder } from './application/useCases/deleteServiceOrder';
+import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressPersistent';
 
 const repositoriesProvider = [
   {
@@ -62,6 +63,7 @@ const repositoriesProvider = [
       OrderTypePersistent,
       OrderExecutionPersistent,
       OrderLocationPersistent,
+      AddressPersistent,
     ]),
   ],
 })

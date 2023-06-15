@@ -25,6 +25,7 @@ export class MapperOrderLocationPersistent {
     result.address = entity.address
       ? this.mapperAddress.mapToAddressPersistent(entity.address)
       : undefined;
+    result.referenceInfo = entity.referenceInfo;
 
     return result;
   }
