@@ -21,13 +21,16 @@ export class OrderExecutionFactory {
 
     const sector = await this.sectorRepo.getById(dto.assignedSectorId || 0);
 
-    return OrderExecution.create({
-      observations: dto.observations,
-      executor: employee || undefined,
-      assignedSector: sector || undefined,
-      assignedTime: dto.assignedTime,
-      estimatedResolutionTime: dto.estimatedResolutionTime,
-      resolutionTime: dto.resolutionTime,
-    });
+    return OrderExecution.create(
+      {
+        observations: dto.observations,
+        executor: employee || undefined,
+        assignedSector: sector || undefined,
+        assignedTime: dto.assignedTime,
+        estimatedResolutionTime: dto.estimatedResolutionTime,
+        resolutionTime: dto.resolutionTime,
+      },
+      dto.id,
+    );
   }
 }

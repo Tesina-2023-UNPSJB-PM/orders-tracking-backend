@@ -24,10 +24,10 @@ export class ServiceOrderRepositoryPersistence
     private repository: Repository<ServiceOrderPersistent>,
     @InjectRepository(OrderExecutionPersistent)
     private executionRepository: Repository<OrderExecutionPersistent>,
-    @InjectRepository(AddressPersistent) 
+    @InjectRepository(AddressPersistent)
     private addressRepository: Repository<AddressPersistent>,
     @InjectRepository(OrderLocationPersistent)
-    private locationRepository: Repository<OrderLocationPersistent>
+    private locationRepository: Repository<OrderLocationPersistent>,
   ) {
     this.mapperServiceOrder = new MapperServiceOrderPersistent();
   }
@@ -64,7 +64,6 @@ export class ServiceOrderRepositoryPersistence
     creationDate,
   }: FindAllServiceOrderFilters): Promise<ServiceOrder[]> {
     const { fromDate, toDate } = getDateInterval(creationDate);
-    
 
     return (
       await this.repository.find({
@@ -78,7 +77,6 @@ export class ServiceOrderRepositoryPersistence
       })
     ).map((row) => this.mapperServiceOrder.mapToServiceOrder(row));
   }
-
 
   async save(entity: ServiceOrder): Promise<ServiceOrder> {
     await this.repository.queryRunner?.startTransaction();
@@ -113,23 +111,42 @@ export class ServiceOrderRepositoryPersistence
     return await this.repository.save(orderPersistent);
   }
 
-  async update(entity: ServiceOrder): Promise<ServiceOrder> {
-    const orderInDB = await this.repository.findOneBy({
-      id: entity.id,
-      removed: false,
-    });
-    if (!orderInDB) {
-      throw new TypeORMError(
-        `Service order with id ${entity.id} does not exist`,
-      );
-    }
+  async update(entity: ServiceOrder): Promise<void> {
+    await this.repository.queryRunner?.startTransaction();
 
+    try {
+
+      await this.updateEntity(entity);
+      await this.repository.queryRunner?.commitTransaction();
+
+    } catch (error) {
+      await this.repository.queryRunner?.rollbackTransaction();
+      throw new TypeORMError(error.message);
+    }
+  }
+
+  private async updateEntity(entity: ServiceOrder): Promise<void> {
     const orderPersistent =
       this.mapperServiceOrder.mapToServiceOrderPersistent(entity);
 
-    const orderUpdated = this.repository.save(orderPersistent);
+    await this.repository.update(entity.id, {
+      description: orderPersistent.description,
+      priority: orderPersistent.priority,
+      status: orderPersistent.status,
+      type: orderPersistent.type,
+      customerId: orderPersistent.customerId,
+      detail: orderPersistent.detail,
+    });
 
-    return entity;
+    const execution = orderPersistent.execution;
+    if (execution && execution.id) {
+      await this.executionRepository.update(execution.id, execution);
+    }
+
+    const destination = orderPersistent.destination;
+    if (destination && destination.id) {
+      await this.locationRepository.update(destination.id, destination);
+    }
   }
 
   async delete(id: number): Promise<void> {

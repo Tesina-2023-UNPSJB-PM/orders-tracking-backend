@@ -22,6 +22,7 @@ export class MapperOrderLocationPersistent {
   }
   mapToOrderLocationPersistent(entity: OrderLocation): OrderLocationPersistent {
     const result = new OrderLocationPersistent();
+    result.id = entity.id;
     result.address = entity.address
       ? this.mapperAddress.mapToAddressPersistent(entity.address)
       : undefined;

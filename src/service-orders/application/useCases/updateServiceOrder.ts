@@ -23,6 +23,6 @@ export class UpdateServiceOrder {
     // Mapping request from dto to entity
     const entityToUpdate = await this.serviceOrderFactory.createEntity(request);
 
-    this.serviceOrderRepo.update(entityToUpdate);
+    await this.serviceOrderRepo.update(entityToUpdate);
   }
 }
