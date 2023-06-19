@@ -1,15 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { CreateServiceOrder } from 'src/service-orders/application/useCases/createServiceOrder';
-import { GetAllServiceOrder } from 'src/service-orders/application/useCases/getAllServiceOrder';
+import { DeleteServiceOrder } from 'src/service-orders/application/useCases/deleteServiceOrder';
 import { GetByFilterServiceOrder } from 'src/service-orders/application/useCases/getByFilterServiceOrder';
 import { GetServiceOrderById } from 'src/service-orders/application/useCases/getServiceOrderById';
 import { UpdateServiceOrder } from 'src/service-orders/application/useCases/updateServiceOrder';
@@ -26,6 +26,7 @@ export class ServiceOrdersController {
     private updateOrder: UpdateServiceOrder,
     private getByFilter: GetByFilterServiceOrder,
     private getById: GetServiceOrderById,
+    private deleteOrder: DeleteServiceOrder,
   ) {}
 
   @Post()
@@ -62,7 +63,8 @@ export class ServiceOrdersController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    throw new Error('Method no defined');
+  remove(@Param() paramId: FindByIDParam) {
+    const id = parseInt(paramId.id, 10);
+    this.deleteOrder.run(id);
   }
 }

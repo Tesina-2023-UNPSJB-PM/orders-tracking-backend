@@ -35,6 +35,6 @@ export class EmployeeRepositoryPersistent implements EmployeeRepository {
 
   save: (employee: Employee) => Promise<Employee>;
 
-  update: (entity?: Employee | undefined) => Promise<Employee>;
+  update: (entity?: Employee | undefined) => Promise<void>;
   delete: (id?: number | undefined) => Promise<void>;
 }

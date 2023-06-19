@@ -70,4 +70,4 @@ $ npm run test:cov
 - ```docker image push localhost:5000/orders-tracking-back:latest```
 
 ### Ejecutando contenedores del proyecto
-- 
+- ```docker compose up --no-recreate```

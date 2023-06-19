@@ -111,7 +111,7 @@ export class Customer extends Entity<CustomerProps> {
     const isBlankBusinessName =
       !values.businessName || Customer.isValueEmpty(values.businessName);
 
-    if (isBlankFirstName || isBlankLastName || isBlankBusinessName)
+    if (isBlankFirstName && isBlankLastName && isBlankBusinessName)
       throw new InvalidDomainException(
         'Customer naming undefined <Firstname | Lastname |BusinessName>',
       );

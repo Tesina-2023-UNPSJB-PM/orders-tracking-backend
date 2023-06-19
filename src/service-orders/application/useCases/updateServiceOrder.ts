@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
-import { ServiceOrderFactory } from '../factories/serviceOrderFactory';
 import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
+import { ServiceOrderFactory } from '../factories/serviceOrderFactory';
 
 @Injectable()
 export class UpdateServiceOrder {
@@ -23,6 +23,6 @@ export class UpdateServiceOrder {
     // Mapping request from dto to entity
     const entityToUpdate = await this.serviceOrderFactory.createEntity(request);
 
-    this.serviceOrderRepo.update(entityToUpdate);
+    await this.serviceOrderRepo.update(entityToUpdate);
   }
 }

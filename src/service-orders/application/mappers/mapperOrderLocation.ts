@@ -10,10 +10,13 @@ export class MapperOrderLocation {
       address = Address.create(from.address, from.address.id);
     }
 
-    return OrderLocation.create({
-      address: address,
-      referenceInfo: from.referenceInfo,
-    });
+    return OrderLocation.create(
+      {
+        address: address,
+        referenceInfo: from.referenceInfo,
+      },
+      from.id,
+    );
   }
 
   mapFromDtoToEntity(
