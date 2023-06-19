@@ -12,6 +12,23 @@ export enum OrderStatus {
   PENDING = 'PENDING',
 }
 
+export const OrderStates = [
+  {
+    code: OrderStatus.DONE,
+    name: 'Finalizado',
+    description: 'La orden de servicio fue finalizada correctamente.'
+  },
+  {
+    code: OrderStatus.CANCELED,
+    name: 'Cancelada',
+    description: 'La orden de servicio fue cancelada.',
+  },
+  {
+    code: OrderStatus.PENDING,
+    name: 'Pendiente',
+    description: 'La orden de servicio se encuentra en ejecución.',
+  }
+]
 export class OrderEnumsUtils {
   public static getOrderStatus(key: string): OrderStatus {
     const status = OrderStatus[key as keyof typeof OrderStatus];

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class MasterDataOrderStatusDTO {
+export class OrderStateDTO {
   @ApiProperty()
   code: string;
 
