@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class OrderExecutionDTO {
   @ApiProperty()
+  id?: number;
+  @ApiProperty()
   observations?: string;
   @ApiProperty()
   executorEmployeId?: number;

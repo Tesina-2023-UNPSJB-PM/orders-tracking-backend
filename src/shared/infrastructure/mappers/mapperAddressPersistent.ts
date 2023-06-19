@@ -18,6 +18,7 @@ export class MapperAddressPersistent {
   }
   mapToAddressPersistent(entity: Address): AddressPersistent {
     const result = new AddressPersistent();
+    result.id = entity.id;
     result.description = entity.description;
     result.city = entity.city;
     result.state = entity.state;

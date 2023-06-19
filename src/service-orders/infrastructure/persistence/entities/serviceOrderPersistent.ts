@@ -36,10 +36,12 @@ export class ServiceOrderPersistent {
   @JoinColumn({ name: 'order_location_id' })
   destination?: OrderLocationPersistent;
   @OneToOne(() => OrderExecutionPersistent, { eager: true })
-  @JoinColumn({ name: 'excetution_id' })
+  @JoinColumn({ name: 'execution_id' })
   execution?: OrderExecutionPersistent;
   @CreateDateColumn({ name: 'creationTime' })
   creationTime?: Date;
   @Column({ type: 'json', nullable: true })
   detail?: object;
+  @Column({ type: 'boolean', default: false })
+  removed: boolean;
 }
