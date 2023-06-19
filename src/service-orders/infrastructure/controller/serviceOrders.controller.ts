@@ -15,7 +15,9 @@ import { GetServiceOrderById } from 'src/service-orders/application/useCases/get
 import { UpdateServiceOrder } from 'src/service-orders/application/useCases/updateServiceOrder';
 import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { FindByIDParam } from 'src/service-orders/dto/findByIdParam.dto';
+import { ServiceOrderDetailResponse } from 'src/service-orders/dto/serviceOrderDetailRes.dto';
 import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
+import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
@@ -37,8 +39,8 @@ export class ServiceOrdersController {
     @Query('employeeId') employeeId: number,
     @Query('customerId') customerId: number,
     @Query('statusCode') statusCode?: OrderStatus,
-    @Query('creationDate') creationDate = '',
-  ) {
+    @Query('creationDate') creationDate: string = '',
+  ): Promise<ServiceOrderResponse[] | null> {
     return this.getByFilter.run({
       employeeId,
       customerId,
@@ -53,7 +55,9 @@ export class ServiceOrdersController {
   }
 
   @Get(':id')
-  findOne(@Param() paramId: FindByIDParam) {
+  findOne(
+    @Param() paramId: FindByIDParam,
+  ): Promise<ServiceOrderDetailResponse | null> {
     const id = parseInt(paramId.id, 10);
     return this.getById.run(id);
   }

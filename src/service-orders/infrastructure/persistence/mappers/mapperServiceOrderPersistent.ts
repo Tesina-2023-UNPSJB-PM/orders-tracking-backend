@@ -3,16 +3,18 @@ import { ServiceOrderPersistent } from '../entities/serviceOrderPersistent';
 import { MapperOrderExecutionPersistent } from './mapperOrderExecutionPersistent';
 import { MapperOrderTypePersistent } from './mapperOrderType';
 import { MapperOrderLocationPersistent } from './mapperOrderLocationPersistent';
+import { MapperCustomerPersistent } from './mapperCustomerPersistent';
 
 export class MapperServiceOrderPersistent {
   private mapperOrderExecution: MapperOrderExecutionPersistent;
   private mapperOrderType: MapperOrderTypePersistent;
   private mapperOrderLocation: MapperOrderLocationPersistent;
-
+  private mapperCustomer: MapperCustomerPersistent;
   constructor() {
     this.mapperOrderExecution = new MapperOrderExecutionPersistent();
     this.mapperOrderType = new MapperOrderTypePersistent();
     this.mapperOrderLocation = new MapperOrderLocationPersistent();
+    this.mapperCustomer = new MapperCustomerPersistent();
   }
 
   mapToServiceOrder(row: ServiceOrderPersistent): ServiceOrder {
@@ -21,7 +23,9 @@ export class MapperServiceOrderPersistent {
         number: row.number,
         description: row.description,
         creationTime: row.creationTime,
-        customerId: row.customerId,
+        customer: row.customer
+          ? this.mapperCustomer.mapToCustomer(row.customer)
+          : undefined,
         detail: row.detail,
         execution: row.execution
           ? this.mapperOrderExecution.mapToOrderExecution(row.execution)
@@ -57,8 +61,9 @@ export class MapperServiceOrderPersistent {
           entityValues.execution,
         )
       : undefined;
-
-    result.customerId = entityValues.customerId;
+    result.customer = entityValues.customer
+      ? this.mapperCustomer.mapToCustomerPersistent(entityValues.customer)
+      : undefined;
     result.destination = entityValues.destination
       ? this.mapperOrderLocation.mapToOrderLocationPersistent(
           entityValues.destination,

@@ -14,6 +14,7 @@ import {
 } from 'src/service-orders/domain/enums/service-order-enums';
 import { OrderLocationPersistent } from './orderLocationPersistent';
 import { OrderExecutionPersistent } from './orderExecutionPersistent';
+import { CustomerPersistent } from 'src/customers/infrastructure/persistence/entitiesDB/customerPersistent';
 
 @Entity('SERVICE_ORDER')
 export class ServiceOrderPersistent {
@@ -30,8 +31,9 @@ export class ServiceOrderPersistent {
   status?: OrderStatus;
   @Column({ type: 'enum', enum: OrderPriority })
   priority?: OrderPriority;
-  @Column('integer')
-  customerId?: number;
+  @ManyToOne(() => CustomerPersistent, { nullable: false, eager: true })
+  @JoinColumn({ name: 'customer_id' })
+  customer?: CustomerPersistent;
   @OneToOne(() => OrderLocationPersistent, { eager: true })
   @JoinColumn({ name: 'order_location_id' })
   destination?: OrderLocationPersistent;

@@ -5,7 +5,6 @@ import { OrderExecutionFactory } from './application/factories/orderExecutionFac
 import { ServiceOrderFactory } from './application/factories/serviceOrderFactory';
 import { CreateServiceOrder } from './application/useCases/createServiceOrder';
 import { GetAllServiceOrder } from './application/useCases/getAllServiceOrder';
-import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
 import { GetServiceOrderById } from './application/useCases/getServiceOrderById';
 import { UpdateServiceOrder } from './application/useCases/updateServiceOrder';
 import { ServiceOrdersController } from './infrastructure/controller/serviceOrders.controller';
@@ -21,6 +20,8 @@ import { SectorRepositoryPersistent } from './infrastructure/persistence/impleme
 import { ServiceOrderRepositoryPersistence } from './infrastructure/persistence/implementation/serviceOrderRepositoryPersistent';
 import { DeleteServiceOrder } from './application/useCases/deleteServiceOrder';
 import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressPersistent';
+import { MapperCustomerPersistent } from './infrastructure/persistence/mappers/mapperCustomerPersistent';
+import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
 
 const repositoriesProvider = [
   {
@@ -53,6 +54,7 @@ const repositoriesProvider = [
     GetByFilterServiceOrder,
     OrderExecutionFactory,
     ServiceOrderFactory,
+    MapperCustomerPersistent,
   ],
   imports: [
     CustomersModule,
