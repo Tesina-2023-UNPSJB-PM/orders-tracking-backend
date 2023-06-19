@@ -45,7 +45,6 @@ export class MapperServiceOrder {
     result.status = this.getStatusDTOOf(values.status as OrderStatus);
     result.type = this.getTypeDto(values.type);
     result.customerId = values.customer?.id;
-    //result.customer = this.getCustomerDTO(values.customer);
     result.destination = this.getOrderLocationDto(values.destination);
     result.execution = this.getServiceExecutionDto(values.execution);
     result.detail = values.detail;
