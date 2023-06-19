@@ -11,8 +11,29 @@ import {
   OrderStatus,
 } from 'src/service-orders/domain/enums/service-order-enums';
 import { OrderStateDTO } from 'src/service-orders/dto/orderState.dto';
+import { Customer } from 'src/customers/domain/entities/customer.entity';
+import { CustomerResponseDTO } from 'src/customers/dto/customer-resp.dto';
+import { ServiceOrderDetailResponse } from 'src/service-orders/dto/serviceOrderDetailRes.dto';
+import { OrderExecutionDetailDTO } from 'src/service-orders/dto/orderExecutionDetail.dto';
 
 export class MapperServiceOrder {
+  mapToServiceOrderDetailDto(from: ServiceOrder): ServiceOrderDetailResponse {
+    const result = new ServiceOrderDetailResponse();
+    const values = from.getValues();
+    result.id = from.id;
+    result.number = values.number;
+    result.description = values.description;
+    result.creationTime = values.creationTime;
+    result.priority = values.priority;
+    result.status = this.getStatusDTOOf(values.status as OrderStatus);
+    result.type = this.getTypeDto(values.type);
+    result.customer = this.getCustomerDTO(values.customer);
+    result.destination = this.getOrderLocationDto(values.destination);
+    result.execution = this.getOrderExecutionDetailDto(values.execution);
+    result.detail = values.detail;
+    return result;
+  }
+
   mapToDto(from: ServiceOrder): ServiceOrderResponse {
     const result = new ServiceOrderResponse();
     const values = from.getValues();
@@ -23,7 +44,8 @@ export class MapperServiceOrder {
     result.priority = values.priority;
     result.status = this.getStatusDTOOf(values.status as OrderStatus);
     result.type = this.getTypeDto(values.type);
-    result.customerId = values.customerId;
+    result.customerId = values.customer?.id;
+    //result.customer = this.getCustomerDTO(values.customer);
     result.destination = this.getOrderLocationDto(values.destination);
     result.execution = this.getServiceExecutionDto(values.execution);
     result.detail = values.detail;
@@ -74,7 +96,39 @@ export class MapperServiceOrder {
     return result;
   }
 
+    private getOrderExecutionDetailDto(
+    execution?: OrderExecution,
+  ): OrderExecutionDetailDTO {
+    const result = new OrderExecutionDetailDTO();
+    if (execution) {
+      const {
+        executor = { firstName: '', lastName: '', recordNumber: '', id: 0 },
+        assignedSector = { name: '', description: '', id: 0 },
+      } = execution;
+      const { firstName = '', lastName = '', recordNumber = '', id: employeeId = 0 } = executor;
+      const { name = '', description = '', id: assignSectorId = 0 } = assignedSector;
+      
+      result.executorEmployee = { firstName, lastName, recordNumber, id: employeeId };
+      result.assignedSector = { name, description, id: assignSectorId };
+      result.observations = execution.observations;
+      result.assignedTime = execution.assignedTime;
+      result.estimatedResolutionTime = execution.estimatedResolutionTime;
+      result.resolutionTime = execution.resolutionTime;
+    }
+    return result;
+  }
+
   private getStatusDTOOf(status: OrderStatus): OrderStateDTO | undefined {
     return OrderStates.find(({ code }) => code == status);
+  }
+
+  getCustomerDTO(customer: Customer | undefined) {
+    const result = new CustomerResponseDTO();
+    if (customer) {
+      result.id = customer.id;
+      result.firstName = customer.firstName;
+      result.lastName = customer.lastName;
+    }
+    return result;
   }
 }

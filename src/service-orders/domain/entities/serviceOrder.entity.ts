@@ -4,6 +4,7 @@ import { OrderPriority, OrderStatus } from '../enums/service-order-enums';
 import { OrderLocation } from './orderLocation.entity';
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
 import { OrderExecution } from './orderExecution.entity';
+import { Customer } from 'src/customers/domain/entities/customer.entity';
 
 export interface ServiceOrderProps {
   number?: string;
@@ -12,6 +13,7 @@ export interface ServiceOrderProps {
   status?: OrderStatus;
   priority?: OrderPriority;
   customerId?: number;
+  customer?: Customer;
   destination?: OrderLocation;
   execution?: OrderExecution;
   creationTime?: Date;

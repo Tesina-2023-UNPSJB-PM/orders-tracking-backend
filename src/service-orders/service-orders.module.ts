@@ -19,6 +19,7 @@ import { OrderTypePersistent } from './infrastructure/persistence/entities/order
 import { OrderExecutionPersistent } from './infrastructure/persistence/entities/orderExecutionPersistent';
 import { OrderLocationPersistent } from './infrastructure/persistence/entities/orderLocationPersistent';
 import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
+import { MapperCustomerPersistent } from './infrastructure/persistence/mappers/mapperCustomerPersistent';
 
 const repositoriesProvider = [
   {
@@ -50,6 +51,7 @@ const repositoriesProvider = [
     GetByFilterServiceOrder,
     OrderExecutionFactory,
     ServiceOrderFactory,
+    MapperCustomerPersistent,
   ],
   imports: [
     CustomersModule,

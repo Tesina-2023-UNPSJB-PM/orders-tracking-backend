@@ -57,7 +57,7 @@ export class ServiceOrderRepositoryPersistence
     return (
       await this.repository.find({
         where: {
-          customerId,
+          customer: {id: customerId},
           execution: { executor: { id: employeeId } },
           status: statusCode,
           creationTime: Between(fromDate, toDate),
