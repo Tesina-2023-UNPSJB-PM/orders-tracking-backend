@@ -18,7 +18,7 @@ export class EmployeePersistent {
     length: 50,
     nullable: true,
   })
-  recordNumber: string;
+  recordNumber?: string;
 
   @Column({
     name: 'first_name',
@@ -26,7 +26,7 @@ export class EmployeePersistent {
     length: 80,
     nullable: false,
   })
-  firstName: string;
+  firstName?: string;
 
   @Column({
     name: 'last_name',
@@ -34,9 +34,9 @@ export class EmployeePersistent {
     length: 80,
     nullable: false,
   })
-  lastName: string;
+  lastName?: string;
 
   @ManyToOne(() => SectorPersistent, { eager: true })
   @JoinColumn({ name: 'sector_id' })
-  sector: SectorPersistent;
+  sector?: SectorPersistent;
 }

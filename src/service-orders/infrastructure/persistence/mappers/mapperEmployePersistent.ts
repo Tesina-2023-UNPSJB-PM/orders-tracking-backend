@@ -22,10 +22,10 @@ export class MapperEmployeePersistent {
   mapToEmployee(row: EmployeePersistent): Employee {
     return Employee.create(
       {
-        firstName: row.firstName,
-        lastName: row.lastName,
-        recordNumber: row.recordNumber,
-        sector: this.mapperSector.mapToSector(row.sector),
+        firstName: row.firstName ?? '',
+        lastName: row.lastName ?? '',
+        recordNumber: row.recordNumber ?? '',
+        sector: this.mapperSector.mapToSector(row.sector ?? {id: 0, name: '', description: ''}) ,
       },
       row.id,
     );

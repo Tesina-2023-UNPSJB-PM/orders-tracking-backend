@@ -4,6 +4,8 @@ import { OrderExecutionSectorDTO } from './orderExecutionSector.dto';
 
 export class OrderExecutionDetailDTO {
   @ApiProperty()
+  id?: number;
+  @ApiProperty()
   observations?: string;
   @ApiProperty()
   executorEmployee?: OrderExecutionEmployeeDTO;
