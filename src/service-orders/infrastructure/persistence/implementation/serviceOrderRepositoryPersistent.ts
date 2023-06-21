@@ -134,17 +134,17 @@ export class ServiceOrderRepositoryPersistence
       priority: orderPersistent.priority,
       status: orderPersistent.status,
       type: orderPersistent.type,
-      //customerId: orderPersistent.customerId,
+      customer: {id: orderPersistent.customer?.id },
       detail: orderPersistent.detail,
     });
 
     const execution = orderPersistent.execution;
-    if (execution && execution.id) {
+    if (execution?.id) {
       await this.executionRepository.update(execution.id, execution);
     }
 
     const destination = orderPersistent.destination;
-    if (destination && destination.id) {
+    if (destination?.id) {
       await this.locationRepository.update(destination.id, destination);
     }
   }

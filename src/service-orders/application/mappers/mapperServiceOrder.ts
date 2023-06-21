@@ -67,10 +67,10 @@ export class MapperServiceOrder {
     if (destination) {
       result.address = {
         id: destination.id,
-        description: destination.address?.description || '',
-        city: destination.address?.city || '',
-        country: destination.address?.country || '',
-        state: destination.address?.state || '',
+        description: destination.address?.description ?? '',
+        city: destination.address?.city ?? '',
+        country: destination.address?.country ?? '',
+        state: destination.address?.state ?? '',
         zipCode: destination.address?.zipCode,
         latitude: destination.address?.location.latitude,
         longitude: destination.address?.location.longitude,
@@ -95,7 +95,7 @@ export class MapperServiceOrder {
     return result;
   }
 
-    private getOrderExecutionDetailDto(
+  private getOrderExecutionDetailDto(
     execution?: OrderExecution,
   ): OrderExecutionDetailDTO {
     const result = new OrderExecutionDetailDTO();
@@ -104,15 +104,30 @@ export class MapperServiceOrder {
         executor = { firstName: '', lastName: '', recordNumber: '', id: 0 },
         assignedSector = { name: '', description: '', id: 0 },
       } = execution;
-      const { firstName = '', lastName = '', recordNumber = '', id: employeeId = 0 } = executor;
-      const { name = '', description = '', id: assignSectorId = 0 } = assignedSector;
-      
-      result.executorEmployee = { firstName, lastName, recordNumber, id: employeeId };
+      const {
+        firstName = '',
+        lastName = '',
+        recordNumber = '',
+        id: employeeId = 0,
+      } = executor;
+      const {
+        name = '',
+        description = '',
+        id: assignSectorId = 0,
+      } = assignedSector;
+
+      result.executorEmployee = {
+        firstName,
+        lastName,
+        recordNumber,
+        id: employeeId,
+      };
       result.assignedSector = { name, description, id: assignSectorId };
       result.observations = execution.observations;
       result.assignedTime = execution.assignedTime;
       result.estimatedResolutionTime = execution.estimatedResolutionTime;
       result.resolutionTime = execution.resolutionTime;
+      result.id = execution.id;
     }
     return result;
   }

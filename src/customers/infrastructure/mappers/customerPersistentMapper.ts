@@ -37,14 +37,14 @@ export class CustomerPersistentMapper {
   public getCustomerOf(data: CustomerPersistent): Customer {
     return Customer.createCustomer(
       {
-        customerNumber: data.customerNumber,
-        documentNumber: data.documentNumber,
+        customerNumber: data.customerNumber ?? '',
+        documentNumber: data.documentNumber ?? '',
         firstName: data.firstName,
         lastName: data.lastName,
         businessName: data.businessName,
         email: data.email,
         phones: data.phones,
-        address: this.getAddressValuesOf(data.address),
+        address: this.getAddressValuesOf(data.address ?? {city: '', country: '', description: '', state: '', latitude: 0, longitude: 0}),
       },
       data.id,
     );

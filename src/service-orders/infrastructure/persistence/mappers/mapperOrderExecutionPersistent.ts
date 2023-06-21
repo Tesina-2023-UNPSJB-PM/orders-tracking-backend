@@ -41,9 +41,10 @@ export class MapperOrderExecutionPersistent {
     result.assignedSector = entity.assignedSector
       ? this.mapperSector.mapToSectorPersistent(entity.assignedSector)
       : undefined;
-    result.executor = entity.executor
-      ? this.mapperEmployee.mapToEmployeePersistent(entity.executor)
-      : undefined;
+     result.executor = {id:entity?.executor?.id}
+    // result.executor = entity.executor
+    //   ? this.mapperEmployee.mapToEmployeePersistent(entity.executor)
+    //   : undefined;
 
     return result;
   }

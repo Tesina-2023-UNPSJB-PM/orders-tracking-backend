@@ -1,20 +1,8 @@
-import { OrderExecution } from 'src/service-orders/domain/entities/orderExecution.entity';
-import { OrderExecutionPersistent } from '../entities/orderExecutionPersistent';
-import { MapperEmployeePersistent } from './mapperEmployePersistent';
-import { MapperSectorPersistent } from './mapperSectorPersistent';
 import { Customer } from 'src/customers/domain/entities/customer.entity';
 import { CustomerPersistent } from 'src/customers/infrastructure/persistence/entitiesDB/customerPersistent';
-import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressPersistent';
-import { Injectable } from '@nestjs/common';
 
 export class MapperCustomerPersistent {
-  private mapperEmployee: MapperEmployeePersistent;
-  private mapperSector: MapperSectorPersistent;
 
-  constructor() {
-    this.mapperEmployee = new MapperEmployeePersistent();
-    this.mapperSector = new MapperSectorPersistent();
-  }
   mapToCustomer({
     address,
     customerNumber,
@@ -28,9 +16,9 @@ export class MapperCustomerPersistent {
   }: CustomerPersistent): Customer {
     return Customer.createCustomer(
       {
-        address,
-        customerNumber,
-        documentNumber,
+        address: address ?? {city: '', country: '', description: '', state: ''},
+        customerNumber: customerNumber ?? '',
+        documentNumber: documentNumber ?? '',
         businessName,
         email,
         firstName,

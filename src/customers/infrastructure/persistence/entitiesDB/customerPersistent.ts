@@ -16,10 +16,10 @@ export class CustomerPersistent {
     length: 500,
     nullable: false,
   })
-  customerNumber: string;
+  customerNumber?: string;
   //Cuit o Cuil
   @Column('varchar', { name: 'document_number', length: 25, nullable: false })
-  documentNumber: string;
+  documentNumber?: string;
   @Column('varchar', { name: 'first_name', length: 255, nullable: true })
   firstName?: string;
   @Column('varchar', { name: 'last_name', length: 255, nullable: true })
@@ -37,5 +37,5 @@ export class CustomerPersistent {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'address_id' })
-  address: AddressPersistent;
+  address?: AddressPersistent;
 }
