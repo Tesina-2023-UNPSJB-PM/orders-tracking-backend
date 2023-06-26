@@ -68,7 +68,7 @@ export class ServiceOrderRepositoryPersistence
     return (
       await this.repository.find({
         where: {
-          customer: {id: customerId},
+          customer: { id: customerId },
           execution: { executor: { id: employeeId } },
           status: statusCode,
           creationTime: Between(fromDate, toDate),
@@ -78,13 +78,13 @@ export class ServiceOrderRepositoryPersistence
     ).map((row) => this.mapperServiceOrder.mapToServiceOrder(row));
   }
 
-  async save(entity: ServiceOrder): Promise<ServiceOrder> {
+  async save(entity: ServiceOrder): Promise<number> {
     await this.repository.queryRunner?.startTransaction();
     try {
       const orderSaved = await this.saveEntity(entity);
       await this.repository.queryRunner?.commitTransaction;
 
-      return this.mapperServiceOrder.mapToServiceOrder(orderSaved);
+      return orderSaved.id ?? 0;
     } catch (err) {
       await this.repository.queryRunner?.rollbackTransaction();
       throw err;
@@ -115,10 +115,8 @@ export class ServiceOrderRepositoryPersistence
     await this.repository.queryRunner?.startTransaction();
 
     try {
-
       await this.updateEntity(entity);
       await this.repository.queryRunner?.commitTransaction();
-
     } catch (error) {
       await this.repository.queryRunner?.rollbackTransaction();
       throw new TypeORMError(error.message);
@@ -134,7 +132,7 @@ export class ServiceOrderRepositoryPersistence
       priority: orderPersistent.priority,
       status: orderPersistent.status,
       type: orderPersistent.type,
-      customer: {id: orderPersistent.customer?.id },
+      customer: { id: orderPersistent.customer?.id },
       detail: orderPersistent.detail,
     });
 

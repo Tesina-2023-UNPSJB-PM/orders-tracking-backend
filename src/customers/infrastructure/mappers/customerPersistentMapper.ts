@@ -44,7 +44,16 @@ export class CustomerPersistentMapper {
         businessName: data.businessName,
         email: data.email,
         phones: data.phones,
-        address: this.getAddressValuesOf(data.address ?? {city: '', country: '', description: '', state: '', latitude: 0, longitude: 0}),
+        address: this.getAddressValuesOf(
+          data.address ?? {
+            city: '',
+            country: '',
+            description: '',
+            state: '',
+            latitude: 0,
+            longitude: 0,
+          },
+        ),
       },
       data.id,
     );

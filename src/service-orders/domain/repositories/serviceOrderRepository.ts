@@ -4,7 +4,9 @@ import { OrderStatus } from '../enums/service-order-enums';
 
 export interface ServiceOrderRepository extends CrudRepository<ServiceOrder> {
   getByServiceOrderNumber: (number: string) => Promise<ServiceOrder | null>;
-  getByFilters: (filters: FindAllServiceOrderFilters) => Promise<ServiceOrder[]>;
+  getByFilters: (
+    filters: FindAllServiceOrderFilters,
+  ) => Promise<ServiceOrder[]>;
 }
 
 export interface FindAllServiceOrderFilters {

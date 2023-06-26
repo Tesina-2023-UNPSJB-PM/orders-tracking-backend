@@ -34,10 +34,10 @@ export class SectorRepositoryPersistent implements SectorRepository {
     return resultDB ? this.mapper.mapToSector(resultDB) : null;
   }
 
-  async save(entity: Sector): Promise<Sector> {
+  async save(entity: Sector): Promise<number> {
     const sectorPersistent = this.mapper.mapToSectorPersistent(entity);
     const sectorSaved = await this.repository.save(sectorPersistent);
-    return this.mapper.mapToSector(sectorSaved); 
+    return sectorSaved.id ?? 0;
   }
 
   async update(entity: Sector): Promise<void> {
