@@ -20,9 +20,13 @@ export class OrderExecutionPersistent {
   @ManyToOne(() => SectorPersistent, { eager: true })
   @JoinColumn({ name: 'sector_id' })
   assignedSector?: SectorPersistent;
-  @Column({ name: 'assigned_time', type: 'timestamp' })
+  @Column({ name: 'assigned_time', type: 'timestamp', nullable: true })
   assignedTime?: Date;
-  @Column({ name: 'estimated_resolution_time', type: 'timestamp' })
+  @Column({
+    name: 'estimated_resolution_time',
+    type: 'timestamp',
+    nullable: true,
+  })
   estimatedResolutionTime?: Date;
   @Column({ name: 'resolution_time', type: 'timestamp', nullable: true })
   resolutionTime?: Date;
