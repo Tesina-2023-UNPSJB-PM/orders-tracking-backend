@@ -16,8 +16,6 @@ export class CreateServiceOrder {
       request,
     );
     // Save entity
-    const serviceOrderSaved = await this.serviceOrderRepo.save(newServiceOrder);
-    // Mapping response from entity to dto
-    return serviceOrderSaved.id;
+    return this.serviceOrderRepo.save(newServiceOrder);
   }
 }

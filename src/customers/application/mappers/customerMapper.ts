@@ -16,7 +16,7 @@ export class CustomerMapper {
     result.email = customerEntity.email?.value;
     result.phones = customerEntity.phones;
     result.address = this.getAddressDTOOf(customerEntity.address);
-    
+
     return result;
   }
 
@@ -32,6 +32,4 @@ export class CustomerMapper {
     result.longitude = address.location.longitude;
     return result;
   }
-
-  
 }

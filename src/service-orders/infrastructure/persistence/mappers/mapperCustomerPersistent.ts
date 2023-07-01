@@ -2,7 +2,6 @@ import { Customer } from 'src/customers/domain/entities/customer.entity';
 import { CustomerPersistent } from 'src/customers/infrastructure/persistence/entitiesDB/customerPersistent';
 
 export class MapperCustomerPersistent {
-
   mapToCustomer({
     address,
     customerNumber,
@@ -16,7 +15,12 @@ export class MapperCustomerPersistent {
   }: CustomerPersistent): Customer {
     return Customer.createCustomer(
       {
-        address: address ?? {city: '', country: '', description: '', state: ''},
+        address: address ?? {
+          city: '',
+          country: '',
+          description: '',
+          state: '',
+        },
         customerNumber: customerNumber ?? '',
         documentNumber: documentNumber ?? '',
         businessName,

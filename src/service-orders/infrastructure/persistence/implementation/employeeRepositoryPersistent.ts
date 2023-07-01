@@ -33,7 +33,7 @@ export class EmployeeRepositoryPersistent implements EmployeeRepository {
     return resultDB ? this.mapper.mapToEmployee(resultDB) : null;
   }
 
-  save: (employee: Employee) => Promise<Employee>;
+  save: (employee: Employee) => Promise<number>;
 
   update: (entity?: Employee | undefined) => Promise<void>;
   delete: (id?: number | undefined) => Promise<void>;

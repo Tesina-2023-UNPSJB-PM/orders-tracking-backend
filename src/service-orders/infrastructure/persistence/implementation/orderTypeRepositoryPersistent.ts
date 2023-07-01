@@ -28,7 +28,7 @@ export class OrderTypeRepositoryPersistent implements OrderTypeRepository {
 
     return resultDB ? this.mapToOrderType(resultDB) : null;
   }
-  save: (entity?: OrderType | undefined) => Promise<OrderType>;
+  save: (entity?: OrderType | undefined) => Promise<number>;
   update: (entity?: OrderType | undefined) => Promise<void>;
   delete: (id?: number | undefined) => Promise<void>;
 
