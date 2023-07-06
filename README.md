@@ -71,3 +71,10 @@ $ npm run test:cov
 
 ### Ejecutando contenedores del proyecto
 - ```docker compose up --no-recreate```
+
+### Creación de red en docker
+- ```docker network create redlocal```  
+
+## Configuración de proxy server
+ - [NGINX Proxy Manager](https://nginxproxymanager.com/)
+ - [Traefik](https://traefik.io/)
