@@ -9,6 +9,8 @@ import { InvalidDomainExceptionFilter } from './shared/infrastructure/filters/in
 import { PersistentExceptionFilter } from './shared/infrastructure/filters/persistent-exception.filter';
 import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
 
+const BASE_URL = '/api';
+
 /**
  * This is required to retrieves the correct dates when querying the database.
  */
@@ -29,7 +31,9 @@ function configDocumentApi(app: INestApplication) {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('/doc', app, document, {
+    useGlobalPrefix: true,
+  });
 }
 
 function configExceptionFilters(app: INestApplication) {
@@ -43,6 +47,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['verbose'],
   });
+
+  app.setGlobalPrefix(BASE_URL);
 
   configDocumentApi(app);
 
