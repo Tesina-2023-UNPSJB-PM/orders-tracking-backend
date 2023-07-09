@@ -1,17 +1,6 @@
 version: '3.9'
 
 services:
-  #proxy-manager:
-  #  image: 'jc21/nginx-proxy-manager:latest'
-  #  container_name: proxy-manager
-  #  restart: unless-stopped
-  #  ports:
-  #    - '81:81'
-  #    - '443:443'
-  #  volumes:
-  #    - ./data:/data
-  #    - ./letsencrypt:/etc/letsencrypt
-
   traefik:
     image: "traefik:v2.10"
     container_name: "traefik"
@@ -46,24 +35,25 @@ services:
   
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgAdmin2
+    container_name: pgadmin4
     restart: always
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@TrackingOrders.edu
       - PGADMIN_DEFAULT_PASSWORD=tesina2023
       - PGADMIN_LISTEN_PORT=80
+      - SCRIPT_NAME=/pgadmin4  
     ports:
-      - 8081:80
+      - 5050:80
     volumes:
       - /var/lib/pgadmin  
     depends_on:
       - serverDB
     labels:   
-      - "traefik.http.routers.pgadmin.rule=Path(`/pgadmin`)"
+      - "traefik.http.routers.pgadmin.rule=PathPrefix(`/pgadmin4`)"
       - traefik.http.services.pgadmin.loadbalancer.server.port=80
 
   app-back:
-    image: localhost:5000/orders-tracking-back:latest
+    image: orders-tracking-back
     container_name: ms1 
     restart: always
     ports:
@@ -71,7 +61,7 @@ services:
     depends_on:
       - serverDB
     labels:   
-      - "traefik.http.routers.app-back.rule=Path(`/back`)"
+      - "traefik.http.routers.app-back.rule=PathPrefix(`/api`)"
       - traefik.http.services.app-back.loadbalancer.server.port=8085
 
   app-front:
