@@ -53,7 +53,7 @@ async function bootstrap() {
   configDocumentApi(app);
 
   configExceptionFilters(app);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const configService = app.get(ConfigService);
   const portApp = configService.get('SERVER_PORT');

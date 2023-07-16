@@ -5,6 +5,8 @@ import {
 } from 'src/service-orders/domain/repositories/serviceOrderRepository';
 import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { MapperServiceOrder } from '../mappers/mapperServiceOrder';
+import { PageOptionsDto } from 'src/shared/dto/pagination/page-options.dto';
+import { PageDto } from 'src/shared/dto/pagination/page.dto';
 
 @Injectable()
 export class GetByFilterServiceOrder {
@@ -19,9 +21,10 @@ export class GetByFilterServiceOrder {
 
   async run(
     filters: FindAllServiceOrderFilters,
-  ): Promise<ServiceOrderResponse[]> {
-    const result = await this.serviceOrderRepo.getByFilters(filters);
-
-    return result.map((order) => this.mapper.mapToDto(order));
+    pageOptionsDto: PageOptionsDto
+  ): Promise<PageDto<ServiceOrderResponse>> {
+    const result = await this.serviceOrderRepo.getByFilters(filters, pageOptionsDto);
+    const serviceOrders = result.data.map((order) => this.mapper.mapToDto(order))
+    return new PageDto(serviceOrders, result.meta);
   }
 }
