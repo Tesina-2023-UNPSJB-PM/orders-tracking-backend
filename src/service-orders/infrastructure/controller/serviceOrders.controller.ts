@@ -18,6 +18,9 @@ import { FindByIDParam } from 'src/service-orders/dto/findByIdParam.dto';
 import { ServiceOrderDetailResponse } from 'src/service-orders/dto/serviceOrderDetailRes.dto';
 import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto';
 import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
+import { PageOptionsDto } from 'src/shared/dto/pagination/page-options.dto';
+import { PageDto } from 'src/shared/dto/pagination/page.dto';
+import { ApiPaginatedResponse } from 'src/shared/infrastructure/decorators/api-paginated.decorator';
 
 @Controller('/tracking-so/orders')
 export class ServiceOrdersController {
@@ -35,18 +38,20 @@ export class ServiceOrdersController {
   }
 
   @Get()
+  @ApiPaginatedResponse(ServiceOrderResponse)
   findAll(
+    @Query() pageOptionsDto: PageOptionsDto,
     @Query('employeeId') employeeId: number,
     @Query('customerId') customerId: number,
     @Query('statusCode') statusCode?: OrderStatus,
     @Query('creationDate') creationDate: string = '',
-  ): Promise<ServiceOrderResponse[] | null> {
+  ): Promise<PageDto<ServiceOrderResponse>> {
     return this.getByFilter.run({
       employeeId,
       customerId,
       statusCode,
       creationDate: creationDate ? new Date(creationDate) : undefined,
-    });
+    }, pageOptionsDto);
   }
 
   @Patch()

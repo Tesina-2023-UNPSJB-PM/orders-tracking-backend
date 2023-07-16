@@ -13,6 +13,9 @@ import { getDateInterval } from 'src/shared/infrastructure/utils/date.utils';
 import { OrderExecutionPersistent } from '../entities/orderExecutionPersistent';
 import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressPersistent';
 import { OrderLocationPersistent } from '../entities/orderLocationPersistent';
+import { PageOptionsDto } from 'src/shared/dto/pagination/page-options.dto';
+import { PageDto } from 'src/shared/dto/pagination/page.dto';
+import { PageMetaDto } from 'src/shared/dto/pagination/page-meta.dto';
 
 @Injectable()
 export class ServiceOrderRepositoryPersistence
@@ -57,25 +60,39 @@ export class ServiceOrderRepositoryPersistence
       : null;
   }
 
-  async getByFilters({
-    customerId,
-    employeeId,
-    statusCode,
-    creationDate,
-  }: FindAllServiceOrderFilters): Promise<ServiceOrder[]> {
+  async getByFilters(
+    {
+      customerId,
+      employeeId,
+      statusCode,
+      creationDate,
+    }: FindAllServiceOrderFilters,
+    pageOptionsDto: PageOptionsDto,
+  ): Promise<PageDto<ServiceOrder>> {
     const { fromDate, toDate } = getDateInterval(creationDate);
 
-    return (
-      await this.repository.find({
-        where: {
-          customer: { id: customerId },
-          execution: { executor: { id: employeeId } },
-          status: statusCode,
-          creationTime: Between(fromDate, toDate),
-          removed: false,
-        },
-      })
-    ).map((row) => this.mapperServiceOrder.mapToServiceOrder(row));
+    const { skip, take, order } = pageOptionsDto;
+
+    const [data, itemCount] = await this.repository.findAndCount({
+      skip,
+      take,
+      order: { creationTime: order },
+      where: {
+        removed: false,
+        status: statusCode,
+        creationTime: Between(fromDate, toDate),
+        customer: customerId ? { id: customerId } : {},
+        execution: employeeId ? { executor: { id: employeeId } } : {},
+      },
+    });
+
+    const serviceOrders = data.map((row) =>
+      this.mapperServiceOrder.mapToServiceOrder(row),
+    );
+
+    const pageMetaDto = new PageMetaDto({ itemCount, pageOptionsDto });
+
+    return new PageDto(serviceOrders, pageMetaDto);
   }
 
   async save(entity: ServiceOrder): Promise<number> {

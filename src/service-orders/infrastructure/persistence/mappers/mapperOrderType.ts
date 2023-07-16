@@ -5,7 +5,7 @@ export class MapperOrderTypePersistent {
   mapToOrderType(row: OrderTypePersistent): OrderType {
     return OrderType.create(
       {
-        name: row.name || '',
+        name: row.name ?? '',
         description: row.description,
       },
       row.id,
