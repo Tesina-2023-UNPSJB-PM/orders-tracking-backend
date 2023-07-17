@@ -76,7 +76,7 @@ export class ServiceOrderRepositoryPersistence
     const [data, itemCount] = await this.repository.findAndCount({
       skip,
       take,
-      order: { creationTime: order },
+      order: { number: order },
       where: {
         removed: false,
         status: statusCode,
