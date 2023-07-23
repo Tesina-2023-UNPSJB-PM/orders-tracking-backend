@@ -34,7 +34,7 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     this.validateID(id);
-    const result = await this.usersService.findOne(+id);
+    const result = await this.usersService.findById(+id);
 
     if (!result) throw new NotFoundException(`User with id ${id} not found`);
 

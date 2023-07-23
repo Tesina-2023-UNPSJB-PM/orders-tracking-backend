@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 
 const configPath = path.join(
@@ -41,6 +42,7 @@ const configPath = path.join(
     UsersModule,
     CustomersModule,
     MasterDataModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

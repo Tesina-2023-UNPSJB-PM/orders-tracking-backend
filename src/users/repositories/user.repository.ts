@@ -26,4 +26,8 @@ export class UserRepository implements CrudRepository<User> {
   async delete(id: number): Promise<void> {
     this.repository.update(id, { removed: true });
   }
+
+  async findByUsername(value: string): Promise<User | null> {
+    return this.repository.findOneBy({ username: value, removed: false });
+  }
 }

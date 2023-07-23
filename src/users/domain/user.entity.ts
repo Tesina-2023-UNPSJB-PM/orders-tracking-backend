@@ -10,7 +10,7 @@ export class User {
   lastName: string;
   @Column({ name: 'email', length: 150, nullable: true })
   email: string;
-  @Column({ name: 'username', length: 150, nullable: false })
+  @Column({ name: 'username', unique: true, length: 150, nullable: false })
   username: string;
   @Column({ name: 'password', length: 255, nullable: false })
   password: string;

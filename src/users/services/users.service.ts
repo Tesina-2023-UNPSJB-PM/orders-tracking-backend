@@ -21,8 +21,14 @@ export class UsersService {
     return result.map((user) => UserMapper.mapToDTO(user));
   }
 
-  async findOne(id: number): Promise<UserDTO | null> {
+  async findById(id: number): Promise<UserDTO | null> {
     const result = await this.userRepository.getById(id);
+    return result ? UserMapper.mapToDTO(result) : null;
+  }
+
+  async findByUsername(value: string): Promise<UserDTO | null> {
+    const result = await this.userRepository.findByUsername(value);
+
     return result ? UserMapper.mapToDTO(result) : null;
   }
 
