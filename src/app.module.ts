@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 
 const configPath = path.join(
@@ -29,7 +30,7 @@ const configPath = path.join(
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        synchronize: false,
+        synchronize: true,
         autoLoadEntities: true,
         retryAttempts: 5,
         logger: 'debug',
@@ -41,6 +42,7 @@ const configPath = path.join(
     UsersModule,
     CustomersModule,
     MasterDataModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

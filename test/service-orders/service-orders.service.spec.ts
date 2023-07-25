@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ServiceOrdersService } from '../../src/service-orders/application/service-orders.service';
 import { CustomersModule } from '../../src/customers/customers.module';
 import { UsersModule } from '../../src/users/users.module';
-import { UsersService } from '../../src/users/users.service';
+import { UsersService } from '../../src/users/services/users.service';
 
 describe('ServiceOrdersService', () => {
   let service: ServiceOrdersService;

@@ -1,13 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { AppModule } from './app.module';
 
 import { InvalidDomainExceptionFilter } from './shared/infrastructure/filters/invalid-domain-exception.filter';
 import { PersistentExceptionFilter } from './shared/infrastructure/filters/persistent-exception.filter';
 import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
+import { UserDTO } from './users/dto/user.dto';
+import { UserNotFoundExceptionFilter } from './shared/infrastructure/filters/userNotFoundException.filter';
 
 const BASE_URL = '/api';
 
@@ -40,6 +47,7 @@ function configExceptionFilters(app: INestApplication) {
   app.useGlobalFilters(new InvalidDomainExceptionFilter());
   app.useGlobalFilters(new PersistentExceptionFilter());
   app.useGlobalFilters(new CustomerExceptionsFilter());
+  app.useGlobalFilters(new UserNotFoundExceptionFilter());
 }
 
 async function bootstrap() {
