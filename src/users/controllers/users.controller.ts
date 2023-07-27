@@ -11,7 +11,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
-import { UserDTO } from '../dto/user.dto';
 import { CreateUserDTO } from '../dto/createUser.dto';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 import { UpdateUserDTO } from '../dto/updateUser.dto';
