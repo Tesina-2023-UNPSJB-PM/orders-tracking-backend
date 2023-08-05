@@ -78,3 +78,8 @@ $ npm run test:cov
 ## Configuración de proxy server
  - [NGINX Proxy Manager](https://nginxproxymanager.com/)
  - [Traefik](https://traefik.io/)
+
+## Acceso a Pg Admin
+* http://vps-3107443-x.dattaweb.com/pgadmin4
+* admin@TrackingOrders.edu
+* PGADMIN_DEFAULT_PASSWORD=tesina2023
