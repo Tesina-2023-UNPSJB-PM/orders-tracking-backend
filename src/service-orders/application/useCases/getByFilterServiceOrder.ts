@@ -21,10 +21,15 @@ export class GetByFilterServiceOrder {
 
   async run(
     filters: FindAllServiceOrderFilters,
-    pageOptionsDto: PageOptionsDto
+    pageOptionsDto: PageOptionsDto,
   ): Promise<PageDto<ServiceOrderResponse>> {
-    const result = await this.serviceOrderRepo.getByFilters(filters, pageOptionsDto);
-    const serviceOrders = result.data.map((order) => this.mapper.mapToDto(order))
+    const result = await this.serviceOrderRepo.getByFilters(
+      filters,
+      pageOptionsDto,
+    );
+    const serviceOrders = result.data.map((order) =>
+      this.mapper.mapToDto(order),
+    );
     return new PageDto(serviceOrders, result.meta);
   }
 }

@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
 import { MapperServiceOrder } from '../mappers/mapperServiceOrder';
-import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { ServiceOrderDetailResponse } from 'src/service-orders/dto/serviceOrderDetailRes.dto';
 
 @Injectable()
