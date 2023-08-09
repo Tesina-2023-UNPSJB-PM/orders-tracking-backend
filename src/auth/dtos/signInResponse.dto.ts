@@ -3,6 +3,8 @@ import { UserDTO } from 'src/users/dto/user.dto';
 
 class UserProfile {
   @ApiProperty()
+  id: number;
+  @ApiProperty()
   firstName: string;
   @ApiProperty()
   lastName: string;
@@ -25,6 +27,7 @@ export class SignInResponseDTO {
     const result = new SignInResponseDTO();
     result.access_token = jwt;
     result.userProfile = {
+      id: userData.id,
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
