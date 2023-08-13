@@ -1,8 +1,8 @@
-import { MasterDataOrderStatusDTO } from "src/master-data/dto/master-data-order-status.dto";
-import { OrderTypeDTO } from "src/service-orders/dto/orderType.dto";
-import { MasterDataCustomerDTO } from "./master-data-customer.dto";
-import { MasterDataEmployeeDTO } from "./master-data-employee.dto";
-import { ApiProperty } from "@nestjs/swagger";
+import { MasterDataOrderStatusDTO } from 'src/master-data/dto/master-data-order-status.dto';
+import { OrderTypeDTO } from 'src/service-orders/dto/orderType.dto';
+import { MasterDataCustomerDTO } from './master-data-customer.dto';
+import { MasterDataEmployeeDTO } from './master-data-employee.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class MasterDataResponse {
   @ApiProperty()

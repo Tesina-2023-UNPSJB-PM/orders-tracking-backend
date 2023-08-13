@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { log } from 'console';
 import { CustomerPersistent } from 'src/customers/infrastructure/persistence/entitiesDB/customerPersistent';
 import { MasterDataCustomerMapper } from 'src/master-data/application/mappers/customers.mapper';
 import { MasterDataEmployeesMapper } from 'src/master-data/application/mappers/employees.mapper';
-import { MasterDataStatesMapper } from 'src/master-data/application/mappers/order-status.mapper';
 import { MasterDataOrderTypeMapper } from 'src/master-data/application/mappers/order-type.mapper';
 import { MasterDataRepository } from 'src/master-data/domain/repositories/masterDataRepository';
 import { MasterDataCustomerDTO } from 'src/master-data/dto/master-data-customer.dto';
@@ -11,7 +11,7 @@ import { MasterDataEmployeeDTO } from 'src/master-data/dto/master-data-employee.
 import { MasterDataOrderStatusDTO } from 'src/master-data/dto/master-data-order-status.dto';
 import { MasterDataOrderTypeDTO } from 'src/master-data/dto/master-data-order-type.dto';
 import { MasterDataResponse } from 'src/master-data/dto/master-data-resp.dto';
-import { OrderStates, OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
+import { OrderStates } from 'src/service-orders/domain/enums/service-order-enums';
 import { EmployeePersistent } from 'src/service-orders/infrastructure/persistence/entities/employeePersistent';
 import { OrderTypePersistent } from 'src/service-orders/infrastructure/persistence/entities/orderTypePersistent';
 import { DataSource } from 'typeorm';
@@ -23,7 +23,6 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
   constructor(
     private masterDataCustomerMapper: MasterDataCustomerMapper,
     private masterDataEmployeesMapper: MasterDataEmployeesMapper,
-    private masterDataStatesMapper: MasterDataStatesMapper,
     private masterDataOrderTypeMapper: MasterDataOrderTypeMapper,
     @InjectDataSource() private dataSource: DataSource,
   ) {}
@@ -78,12 +77,38 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
       .select('*')
       .from(OrderTypePersistent, 'order_type')
       .getRawMany()
-      .then((orderTypes) => this.masterDataOrderTypeMapper.mapToOrderTypesResponseDTO(orderTypes));
+      .then((orderTypes) =>
+        this.masterDataOrderTypeMapper.mapToOrderTypesResponseDTO(orderTypes),
+      );
   }
 
   private getServiceOrderStates(): Promise<MasterDataOrderStatusDTO[]> {
-    return Promise.resolve(
-      OrderStates
-    );
+    return Promise.resolve(OrderStates);
+  }
+
+  async getEmployeeByUsername(
+    username: string,
+  ): Promise<MasterDataEmployeeDTO | null> {
+    return this.dataSource
+      .getRepository(EmployeePersistent)
+      .createQueryBuilder('employee')
+      .innerJoinAndSelect('employee.user', 'user')
+      .where('user.username = :username', { username })
+      .andWhere('user.enabled = :enabled', { enabled: true })
+      .andWhere('user.removed = :removed', { removed: false })
+      .printSql()
+      .getOne()
+      .then((result) => {
+        if (result) {
+          const { id, recordNumber, firstName, lastName } = result;
+          return {
+            id,
+            recordNumber,
+            firstName,
+            lastName,
+          } as MasterDataEmployeeDTO;
+        }
+        return null;
+      });
   }
 }

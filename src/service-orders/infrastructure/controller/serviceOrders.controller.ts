@@ -44,14 +44,17 @@ export class ServiceOrdersController {
     @Query('employeeId') employeeId: number,
     @Query('customerId') customerId: number,
     @Query('statusCode') statusCode?: OrderStatus,
-    @Query('creationDate') creationDate: string = '',
+    @Query('creationDate') creationDate = '',
   ): Promise<PageDto<ServiceOrderResponse>> {
-    return this.getByFilter.run({
-      employeeId,
-      customerId,
-      statusCode,
-      creationDate: creationDate ? new Date(creationDate) : undefined,
-    }, pageOptionsDto);
+    return this.getByFilter.run(
+      {
+        employeeId,
+        customerId,
+        statusCode,
+        creationDate: creationDate ? new Date(creationDate) : undefined,
+      },
+      pageOptionsDto,
+    );
   }
 
   @Patch()

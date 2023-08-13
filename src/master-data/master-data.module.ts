@@ -10,6 +10,7 @@ import { MasterDataCustomerMapper } from './application/mappers/customers.mapper
 import { MasterDataEmployeesMapper } from './application/mappers/employees.mapper';
 import { MasterDataStatesMapper } from './application/mappers/order-status.mapper';
 import { MasterDataOrderTypeMapper } from './application/mappers/order-type.mapper';
+import { GetEmployeeByUsername } from './application/useCases/getEmployeeByUsername';
 
 const MasterDataRepositoryProvider = {
   provide: 'MasterDataRepository',
@@ -22,11 +23,13 @@ const MasterDataRepositoryProvider = {
   providers: [
     MasterDataRepositoryProvider,
     GetMasterData,
+    GetEmployeeByUsername,
     MasterDataRepositoryPersistent,
     MasterDataCustomerMapper,
     MasterDataEmployeesMapper,
     MasterDataStatesMapper,
     MasterDataOrderTypeMapper,
   ],
+  exports: [GetEmployeeByUsername],
 })
 export class MasterDataModule {}

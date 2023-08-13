@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MasterDataEmployeeDTO } from 'src/master-data/dto/master-data-employee.dto';
 import { UserDTO } from 'src/users/dto/user.dto';
 
 class UserProfile {
@@ -19,10 +20,13 @@ export class SignInResponseDTO {
   access_token: string;
   @ApiProperty()
   userProfile: UserProfile;
+  @ApiProperty()
+  employeeId: number;
 
   public static createSignInResponse(
     jwt: string,
     userData: UserDTO,
+    employee: MasterDataEmployeeDTO | null,
   ): SignInResponseDTO {
     const result = new SignInResponseDTO();
     result.access_token = jwt;
@@ -33,6 +37,7 @@ export class SignInResponseDTO {
       email: userData.email,
       username: userData.username,
     };
+    result.employeeId = employee?.id ?? -1;
 
     return result;
   }
