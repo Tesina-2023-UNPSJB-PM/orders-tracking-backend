@@ -22,6 +22,7 @@ import { DeleteServiceOrder } from './application/useCases/deleteServiceOrder';
 import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressPersistent';
 import { MapperCustomerPersistent } from './infrastructure/persistence/mappers/mapperCustomerPersistent';
 import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
+import { GetSummaryOrders } from './application/useCases/GetSummaryOrders';
 
 const repositoriesProvider = [
   {
@@ -52,6 +53,7 @@ const repositoriesProvider = [
     GetServiceOrderById,
     DeleteServiceOrder,
     GetByFilterServiceOrder,
+    GetSummaryOrders,
     OrderExecutionFactory,
     ServiceOrderFactory,
     MapperCustomerPersistent,
