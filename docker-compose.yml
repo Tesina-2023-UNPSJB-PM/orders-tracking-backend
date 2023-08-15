@@ -1,0 +1,86 @@
+version: '3.9'
+
+services:
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command: 
+      - --api.insecure=true
+      - --providers.docker
+      - --log.level=DEBUG
+      - --accesslog
+      - --api.dashboard=true
+    depends_on:
+      - pgadmin
+      - app-back
+      - app-front
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  serverDB:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: serverDB2
+    restart: always
+    environment:
+      - POSTGRES_DB=TrackingOrders
+      - POSTGRES_USER=AdminDB
+      - POSTGRES_PASSWORD=WC18122023
+    volumes:
+      - /var/lib/postgresql/data     
+    ports:
+      - 5432:5432
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@TrackingOrders.edu
+      - PGADMIN_DEFAULT_PASSWORD=tesina2023
+      - PGADMIN_LISTEN_PORT=80
+      - SCRIPT_NAME=/pgadmin4  
+    ports:
+      - 5050:80
+    volumes:
+      - /var/lib/pgadmin  
+    depends_on:
+      - serverDB
+    labels:   
+      - "traefik.http.routers.pgadmin.rule=PathPrefix(`/pgadmin4`)"
+      - traefik.http.services.pgadmin.loadbalancer.server.port=80
+
+  app-back:
+    image: orders-tracking-back
+    container_name: ms1 
+    restart: always
+    ports:
+      - 8085:8085
+    depends_on:
+      - serverDB
+    labels:   
+      - "traefik.http.routers.app-back.rule=PathPrefix(`/api`)"
+      - traefik.http.services.app-back.loadbalancer.server.port=8085
+
+  app-front:
+    image: orders-tracking-web
+    container_name: orders-tracking-front
+    restart: always
+    ports:
+      - 8082:80
+    depends_on:
+      - pgadmin
+      - app-back      
+    labels:   
+      - "traefik.http.routers.app-front.rule=PathPrefix(`/backoffice`)"
+      - "traefik.http.services.app-front.loadbalancer.server.port=80"      
+      - "traefik.http.services.app-front.loadbalancer.sticky.cookie.name=tesina2023"
+      - "traefik.http.services.app-front.loadbalancer.sticky.cookie.secure=true"
+      - "traefik.http.services.app-front.loadbalancer.sticky.cookie.httpOnly=true"
+
+networks:
+  default:
+    external: true
+    name: redlocal            

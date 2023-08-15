@@ -58,16 +58,28 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Instalación con docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Creación de registro de imagenes propio del proyecto
+- ```docker pull registry```
+- ```docker run -d -p 5000:5000 --restart always --name registry-local -v XXX/YYY:/var/lib/registry registry```
 
-## Stay in touch
+### Creación y push de la imagen del proyecto
+- ```docker build -t orders-tracking-back . ```
+- ```docker tag orders-tracking-back orders-tracking-back:latest```
+- ```docker image push localhost:5000/orders-tracking-back:latest```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Ejecutando contenedores del proyecto
+- ```docker compose up --no-recreate```
 
-## License
+### Creación de red en docker
+- ```docker network create redlocal```  
 
-Nest is [MIT licensed](LICENSE).
+## Configuración de proxy server
+ - [NGINX Proxy Manager](https://nginxproxymanager.com/)
+ - [Traefik](https://traefik.io/)
+
+## Acceso a Pg Admin
+* http://vps-3107443-x.dattaweb.com/pgadmin4
+* admin@TrackingOrders.edu
+* PGADMIN_DEFAULT_PASSWORD=tesina2023
