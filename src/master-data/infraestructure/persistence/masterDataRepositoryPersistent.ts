@@ -96,7 +96,6 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
       .where('user.username = :username', { username })
       .andWhere('user.enabled = :enabled', { enabled: true })
       .andWhere('user.removed = :removed', { removed: false })
-      .printSql()
       .getOne()
       .then((result) => {
         if (result) {
