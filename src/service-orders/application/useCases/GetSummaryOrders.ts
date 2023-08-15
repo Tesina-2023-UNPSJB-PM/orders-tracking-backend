@@ -4,10 +4,14 @@ import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/s
 import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { SummaryOrdersDTO } from 'src/service-orders/dto/summaryOrdersRes.dto';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
+import { MapperServiceOrder } from '../mappers/mapperServiceOrder';
+import { Order } from 'src/shared/dto/pagination/constants/order.constant';
 
 @Injectable()
 export class GetSummaryOrders {
   private _employeeId: number;
+
+  private mapper: MapperServiceOrder;
 
   public get employeeId(): number {
     return this._employeeId;
@@ -20,7 +24,9 @@ export class GetSummaryOrders {
   constructor(
     @Inject('ServiceOrderRepository')
     private serviceOrderRepo: ServiceOrderRepository,
-  ) {}
+  ) {
+    this.mapper = new MapperServiceOrder();
+  }
 
   async run(): Promise<SummaryOrdersDTO> {
     if (!this.employeeId)
@@ -29,7 +35,7 @@ export class GetSummaryOrders {
     // Get orders assigned
     const assignedOrders = await this.getAssignedOrders(this._employeeId);
     // Get recent activity
-    const recentActivityEmployee = this.getRecenActivityEmployee(
+    const recentActivityEmployee = await this.getRecenActivityEmployee(
       this._employeeId,
     );
     const result = new SummaryOrdersDTO();
@@ -42,21 +48,44 @@ export class GetSummaryOrders {
   private async getAssignedOrders(
     employeeId: number,
   ): Promise<ServiceOrderResponse[]> {
+    return await this.getOrdersByStatus(employeeId, OrderStatus.PENDING);
+  }
+
+  private async getRecenActivityEmployee(
+    employeeId: number,
+  ): Promise<ServiceOrderResponse[]> {
+    const doneOrders = await this.getOrdersByStatus(
+      employeeId,
+      OrderStatus.DONE,
+      Order.DESC,
+    );
+
+    const canceledOrders = await this.getOrdersByStatus(
+      employeeId,
+      OrderStatus.CANCELED,
+      Order.DESC,
+    );
+
+    return doneOrders.concat(canceledOrders);
+  }
+
+  private async getOrdersByStatus(
+    employeeId: number,
+    status: OrderStatus,
+    order?: Order,
+  ) {
     const result = await this.serviceOrderRepo.getByFilters(
       {
-        statusCode: OrderStatus.PENDING,
+        statusCode: status,
         employeeId: employeeId,
       },
       {
         page: 0,
         skip: 0,
+        order: order ?? Order.ASC,
       },
     );
 
-    return result.data;
-  }
-
-  private getRecenActivityEmployee(employeeId: number): ServiceOrderResponse[] {
-    throw new Error('Method not implemented.');
+    return result.data.map((order) => this.mapper.mapToDto(order));
   }
 }
