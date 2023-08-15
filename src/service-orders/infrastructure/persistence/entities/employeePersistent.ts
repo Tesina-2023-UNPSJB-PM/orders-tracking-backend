@@ -3,9 +3,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SectorPersistent } from './sectorPersistent';
+import { User } from 'src/users/domain/user.entity';
 
 @Entity('EMPLOYEE')
 export class EmployeePersistent {
@@ -39,4 +41,8 @@ export class EmployeePersistent {
   @ManyToOne(() => SectorPersistent, { eager: true })
   @JoinColumn({ name: 'sector_id' })
   sector?: SectorPersistent;
+
+  @OneToOne(() => User, { nullable: true })
+  @JoinColumn()
+  user?: User;
 }

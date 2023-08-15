@@ -33,6 +33,14 @@ export class EmployeeRepositoryPersistent implements EmployeeRepository {
     return resultDB ? this.mapper.mapToEmployee(resultDB) : null;
   }
 
+  async getByUsername(username: string): Promise<Employee | null> {
+    const resultDB = await this.repository.findOneBy({
+      user: { username },
+    });
+
+    return resultDB ? this.mapper.mapToEmployee(resultDB) : null;
+  }
+
   save: (employee: Employee) => Promise<number>;
 
   update: (entity?: Employee | undefined) => Promise<void>;

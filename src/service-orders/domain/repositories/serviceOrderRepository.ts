@@ -7,7 +7,7 @@ export interface ServiceOrderRepository extends CrudRepository<ServiceOrder> {
   getByServiceOrderNumber: (number: string) => Promise<ServiceOrder | null>;
   getByFilters: (
     filters: FindAllServiceOrderFilters,
-    pageOptionsDto: PageOptionsDto
+    pageOptionsDto: PageOptionsDto,
   ) => Promise<PageDto<ServiceOrder>>;
 }
 

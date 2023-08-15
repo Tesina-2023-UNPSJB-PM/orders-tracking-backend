@@ -5,11 +5,13 @@ import { HashingUtil } from 'src/shared/infrastructure/utils/hashing.util';
 import { SignInRequestDTO } from '../dtos/signInRequest.dto';
 import { JwtService } from '@nestjs/jwt';
 import { SignInResponseDTO } from '../dtos/signInResponse.dto';
+import { GetEmployeeByUsername } from 'src/master-data/application/useCases/getEmployeeByUsername';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private getEmployeeService: GetEmployeeByUsername,
     private jwtService: JwtService,
   ) {}
 
@@ -27,7 +29,8 @@ export class AuthService {
 
     const payload = { sub: user.id, username: user.username };
     const token = await this.jwtService.signAsync(payload);
+    const employee = await this.getEmployeeService.run(user.username);
 
-    return SignInResponseDTO.createSignInResponse(token, user);
+    return SignInResponseDTO.createSignInResponse(token, user, employee);
   }
 }
