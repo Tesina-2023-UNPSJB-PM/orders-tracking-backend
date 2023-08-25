@@ -80,9 +80,17 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
       throw new InvalidDomainException('Order status undefined');
     }
 
-    if ((!id || id === 0) && values.status !== OrderStatus.PENDING)
+    if (
+      (!id || id === 0) &&
+      (values.status == OrderStatus.DONE ||
+        values.status == OrderStatus.CANCELED)
+    )
       throw new InvalidDomainException(
         'The status of the new order is incorrect',
       );
+
+    if (!values.execution?.executor) {
+      values.status = OrderStatus.UNASSIGNED;
+    }
   }
 }
