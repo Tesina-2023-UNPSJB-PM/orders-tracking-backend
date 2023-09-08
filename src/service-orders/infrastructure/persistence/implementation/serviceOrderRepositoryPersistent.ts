@@ -171,4 +171,10 @@ export class ServiceOrderRepositoryPersistence
       this.repository.save(orderPersistent);
     }
   }
+
+  async getOrderExecutionById(
+    id: number,
+  ): Promise<OrderExecutionPersistent | null> {
+    return this.executionRepository.findOneBy({ id: id });
+  }
 }

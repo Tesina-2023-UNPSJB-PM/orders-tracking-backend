@@ -23,6 +23,9 @@ import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressP
 import { MapperCustomerPersistent } from './infrastructure/persistence/mappers/mapperCustomerPersistent';
 import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
 import { GetSummaryOrders } from './application/useCases/GetSummaryOrders';
+import { ExecutionHistoryRepositoryPersistent } from './infrastructure/persistence/implementation/executionHistoryRepositoryPersistent';
+import { ExecutionHistoryPersistent } from './infrastructure/persistence/entities/executionHistoryPersistent';
+import { ReasonStatusPersistent } from './infrastructure/persistence/entities/reasonStatusPersistent';
 
 const repositoriesProvider = [
   {
@@ -40,6 +43,10 @@ const repositoriesProvider = [
   {
     provide: 'OrderTypeRepository',
     useClass: OrderTypeRepositoryPersistent,
+  },
+  {
+    provide: 'ExecutionHistoryRepository',
+    useClass: ExecutionHistoryRepositoryPersistent,
   },
 ];
 
@@ -68,6 +75,8 @@ const repositoriesProvider = [
       OrderExecutionPersistent,
       OrderLocationPersistent,
       AddressPersistent,
+      ExecutionHistoryPersistent,
+      ReasonStatusPersistent,
     ]),
   ],
 })

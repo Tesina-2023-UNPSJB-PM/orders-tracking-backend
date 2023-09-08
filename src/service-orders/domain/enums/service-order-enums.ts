@@ -16,7 +16,7 @@ export const OrderStates = [
   {
     code: OrderStatus.DONE,
     name: 'Finalizado',
-    description: 'La orden de servicio fue finalizada correctamente.'
+    description: 'La orden de servicio fue finalizada correctamente.',
   },
   {
     code: OrderStatus.CANCELED,
@@ -27,8 +27,8 @@ export const OrderStates = [
     code: OrderStatus.PENDING,
     name: 'Pendiente',
     description: 'La orden de servicio se encuentra en ejecución.',
-  }
-]
+  },
+];
 export class OrderEnumsUtils {
   public static getOrderStatus(key: string): OrderStatus {
     const status = OrderStatus[key as keyof typeof OrderStatus];
