@@ -7,6 +7,7 @@ export enum OrderPriority {
 }
 
 export enum OrderStatus {
+  UNASSIGNED = 'UNASSIGNED',
   DONE = 'DONE',
   CANCELED = 'CANCELED',
   PENDING = 'PENDING',
@@ -27,6 +28,12 @@ export const OrderStates = [
     code: OrderStatus.PENDING,
     name: 'Pendiente',
     description: 'La orden de servicio se encuentra en ejecución.',
+  },
+  {
+    code: OrderStatus.UNASSIGNED,
+    name: 'Sin asignar',
+    description:
+      'La orden de servicio se encuentra sin un responsable de ejecución asignado.',
   },
 ];
 export class OrderEnumsUtils {
