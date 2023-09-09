@@ -11,6 +11,7 @@ import { MasterDataEmployeesMapper } from './application/mappers/employees.mappe
 import { MasterDataStatesMapper } from './application/mappers/order-status.mapper';
 import { MasterDataOrderTypeMapper } from './application/mappers/order-type.mapper';
 import { GetEmployeeByUsername } from './application/useCases/getEmployeeByUsername';
+import { MasterDataReasonMapper } from './application/mappers/reasons.mapper';
 
 const MasterDataRepositoryProvider = {
   provide: 'MasterDataRepository',
@@ -29,6 +30,7 @@ const MasterDataRepositoryProvider = {
     MasterDataEmployeesMapper,
     MasterDataStatesMapper,
     MasterDataOrderTypeMapper,
+    MasterDataReasonMapper,
   ],
   exports: [GetEmployeeByUsername],
 })

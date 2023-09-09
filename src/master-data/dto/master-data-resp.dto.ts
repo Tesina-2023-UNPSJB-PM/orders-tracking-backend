@@ -3,6 +3,7 @@ import { OrderTypeDTO } from 'src/service-orders/dto/orderType.dto';
 import { MasterDataCustomerDTO } from './master-data-customer.dto';
 import { MasterDataEmployeeDTO } from './master-data-employee.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { ReasonStatusDTO } from 'src/service-orders/dto/executionHistory/reasonStatus.dto';
 
 export class MasterDataResponse {
   @ApiProperty()
@@ -13,4 +14,6 @@ export class MasterDataResponse {
   serviceOrderTypes?: OrderTypeDTO[];
   @ApiProperty()
   serviceOrderStates?: MasterDataOrderStatusDTO[];
+  @ApiProperty()
+  reasons?: ReasonStatusDTO[];
 }
