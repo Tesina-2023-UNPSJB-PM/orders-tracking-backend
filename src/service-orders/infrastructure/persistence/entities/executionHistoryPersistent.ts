@@ -18,19 +18,19 @@ export class ExecutionHistoryPersistent {
   @JoinColumn({ name: 'execution_id' })
   execution: OrderExecutionPersistent;
 
-  @Column({ type: 'enum', enum: OrderStatus, nullable: false })
+  @Column({ name: 'status', type: 'enum', enum: OrderStatus, nullable: false })
   status: OrderStatus;
 
   @ManyToOne(() => ReasonStatusPersistent, { nullable: false, eager: true })
-  @JoinColumn({ name: 'name_id' })
+  @JoinColumn({ name: 'reason_id' })
   reason: ReasonStatusPersistent;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ name: 'observations', type: 'varchar', nullable: true })
   observations: string;
-
-  @Column({ type: 'text', nullable: true })
-  attachments: string;
 
   @Column({ name: 'registration_date', type: 'timestamp', nullable: false })
   registrationDate: Date;
+
+  @Column({ name: 'attachments', type: 'text', nullable: true })
+  attachments: string;
 }

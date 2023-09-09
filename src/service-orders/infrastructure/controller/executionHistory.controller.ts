@@ -3,13 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Param,
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
+import { ApiConsumes } from '@nestjs/swagger';
 import { CrudExecutionHistory } from 'src/service-orders/application/useCases/executionHistory/crudExecutionHistory';
 import { GetHistoryByExecution } from 'src/service-orders/application/useCases/executionHistory/getHistoryByExecution';
+import { UploadAttachment } from 'src/service-orders/application/useCases/executionHistory/uploadAttachment';
 import { ExecutionHistoryRequestDTO } from 'src/service-orders/dto/executionHistory/executionHistoryRequest.dto';
 import { ExecutionHistoryResponseDTO } from 'src/service-orders/dto/executionHistory/executionHistoryResponse.dto';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
@@ -17,24 +21,25 @@ import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDoma
 @Controller('/tracking-so/execution-history')
 export class ExecutionHistoryController {
   constructor(
-    private crudExecutionHistory: CrudExecutionHistory,
-    private getHistoryByExecution: GetHistoryByExecution,
+    private crudExecutionHistoryCommand: CrudExecutionHistory,
+    private getHistoryByExecutionCommand: GetHistoryByExecution,
+    private uploadAttachmentCommand: UploadAttachment,
   ) {}
 
   @Post()
-  create(@Body() req: ExecutionHistoryRequestDTO) {
-    this.crudExecutionHistory.create(req);
+  create(@Body() req: ExecutionHistoryRequestDTO): Promise<number> {
+    return this.crudExecutionHistoryCommand.create(req);
   }
 
   @Patch()
-  update(@Body() req: ExecutionHistoryRequestDTO) {
-    this.crudExecutionHistory.update(req);
+  update(@Body() req: ExecutionHistoryRequestDTO): Promise<void> {
+    return this.crudExecutionHistoryCommand.update(req);
   }
 
   @Delete(':id')
-  delete(@Param() paramId: string) {
+  delete(@Param() paramId: string): Promise<void> {
     const id = this.convertParamToNumber(paramId);
-    return this.crudExecutionHistory.delete(id);
+    return this.crudExecutionHistoryCommand.delete(id);
   }
 
   @Get(':id')
@@ -42,7 +47,7 @@ export class ExecutionHistoryController {
     @Param('id') paramId: string,
   ): Promise<ExecutionHistoryResponseDTO | null> {
     const id = this.convertParamToNumber(paramId);
-    return this.crudExecutionHistory.getById(id);
+    return this.crudExecutionHistoryCommand.getById(id);
   }
 
   @Get()
@@ -50,7 +55,18 @@ export class ExecutionHistoryController {
     @Query('executionId') id: string,
   ): Promise<ExecutionHistoryResponseDTO[]> {
     const executionId = this.convertParamToNumber(id);
-    return this.getHistoryByExecution.run(executionId);
+    return this.getHistoryByExecutionCommand.run(executionId);
+  }
+
+  @Post(':historyId/attachment')
+  @Header('accept', 'text/plain')
+  @ApiConsumes('text/plain')
+  uploadAttachment(
+    @Param('historyId') paramId: string,
+    @Body() body: string,
+  ): Promise<void> {
+    const id = this.convertParamToNumber(paramId);
+    return this.uploadAttachmentCommand.run(id, body);
   }
 
   private convertParamToNumber(id: string): number {

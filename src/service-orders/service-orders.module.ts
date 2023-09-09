@@ -26,6 +26,10 @@ import { GetSummaryOrders } from './application/useCases/GetSummaryOrders';
 import { ExecutionHistoryRepositoryPersistent } from './infrastructure/persistence/implementation/executionHistoryRepositoryPersistent';
 import { ExecutionHistoryPersistent } from './infrastructure/persistence/entities/executionHistoryPersistent';
 import { ReasonStatusPersistent } from './infrastructure/persistence/entities/reasonStatusPersistent';
+import { ExecutionHistoryController } from './infrastructure/controller/executionHistory.controller';
+import { CrudExecutionHistory } from './application/useCases/executionHistory/crudExecutionHistory';
+import { GetHistoryByExecution } from './application/useCases/executionHistory/getHistoryByExecution';
+import { UploadAttachment } from './application/useCases/executionHistory/uploadAttachment';
 
 const repositoriesProvider = [
   {
@@ -51,7 +55,7 @@ const repositoriesProvider = [
 ];
 
 @Module({
-  controllers: [ServiceOrdersController],
+  controllers: [ServiceOrdersController, ExecutionHistoryController],
   providers: [
     ...repositoriesProvider,
     CreateServiceOrder,
@@ -64,6 +68,9 @@ const repositoriesProvider = [
     OrderExecutionFactory,
     ServiceOrderFactory,
     MapperCustomerPersistent,
+    CrudExecutionHistory,
+    GetHistoryByExecution,
+    UploadAttachment,
   ],
   imports: [
     CustomersModule,
