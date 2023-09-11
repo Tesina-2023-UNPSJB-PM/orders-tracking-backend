@@ -5,6 +5,8 @@ import { OrderLocation } from './orderLocation.entity';
 import { InvalidDomainException } from '../../../shared/domain/exceptions/invalidDomain.error';
 import { OrderExecution } from './orderExecution.entity';
 import { Customer } from 'src/customers/domain/entities/customer.entity';
+import { OrderServiceStatus } from './orderStatus/orderStatus.interface';
+import { StatusFactory } from './orderStatus/statusFactory';
 
 export interface ServiceOrderProps {
   number?: string;
@@ -21,16 +23,40 @@ export interface ServiceOrderProps {
 }
 
 export class ServiceOrder extends Entity<ServiceOrderProps> {
-  private constructor(props: ServiceOrderProps, id?: number) {
+  private orderStatus: OrderServiceStatus;
+
+  private constructor(
+    props: ServiceOrderProps,
+    id?: number,
+    currentStatus?: OrderStatus,
+  ) {
     super(props, id);
+    if (!currentStatus)
+      throw new InvalidDomainException(`Undefined order status`);
+    this.orderStatus = StatusFactory.createOrderStatus(currentStatus, this);
   }
 
   get id(): number {
     return this._id;
   }
 
+  get status(): OrderStatus {
+    return this.orderStatus.getValue();
+  }
+
   getValues(): ServiceOrderProps {
     return this.props;
+  }
+
+  changeStatus(newStatus: OrderStatus): void {
+    if (!this.orderStatus)
+      throw new InvalidDomainException(`Undefined order status`);
+
+    const isStatusValid = this.orderStatus.getNextStates().includes(newStatus);
+
+    if (!isStatusValid) throw new InvalidDomainException(`New invalid status`);
+
+    this.orderStatus = StatusFactory.createOrderStatus(newStatus, this);
   }
 
   /**
@@ -47,7 +73,7 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     ServiceOrder.validatePriority(props);
     ServiceOrder.validateAddressOfDestination(props);
 
-    return new ServiceOrder(props, id);
+    return new ServiceOrder(props, id, props.status);
   }
 
   private static validatePriority(props: ServiceOrderProps) {

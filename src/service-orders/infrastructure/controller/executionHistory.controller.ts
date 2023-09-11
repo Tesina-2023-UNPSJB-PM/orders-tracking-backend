@@ -1,14 +1,11 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Header,
   Param,
-  Patch,
   Post,
   Query,
-  Req,
 } from '@nestjs/common';
 import { ApiConsumes } from '@nestjs/swagger';
 import { CrudExecutionHistory } from 'src/service-orders/application/useCases/executionHistory/crudExecutionHistory';
@@ -31,7 +28,7 @@ export class ExecutionHistoryController {
     return this.crudExecutionHistoryCommand.create(req);
   }
 
-  @Patch()
+  /*@Patch()
   update(@Body() req: ExecutionHistoryRequestDTO): Promise<void> {
     return this.crudExecutionHistoryCommand.update(req);
   }
@@ -40,7 +37,7 @@ export class ExecutionHistoryController {
   delete(@Param() paramId: string): Promise<void> {
     const id = this.convertParamToNumber(paramId);
     return this.crudExecutionHistoryCommand.delete(id);
-  }
+  }*/
 
   @Get(':id')
   getById(
