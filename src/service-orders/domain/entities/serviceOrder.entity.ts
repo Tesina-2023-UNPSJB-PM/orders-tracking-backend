@@ -52,11 +52,12 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     if (!this.orderStatus)
       throw new InvalidDomainException(`Undefined order status`);
 
-    const isStatusValid = this.orderStatus.getNextStates().includes(newStatus);
+    const isStatusValid = this.orderStatus.isValidStatusChange(newStatus);
 
     if (!isStatusValid) throw new InvalidDomainException(`New invalid status`);
 
     this.orderStatus = StatusFactory.createOrderStatus(newStatus, this);
+    this.getValues().status = newStatus;
   }
 
   /**
@@ -115,8 +116,13 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
         'The status of the new order is incorrect',
       );
 
-    if (!values.execution?.executor) {
-      values.status = OrderStatus.UNASSIGNED;
+    if (
+      values.status !== OrderStatus.UNASSIGNED &&
+      !values.execution?.executor.id
+    ) {
+      throw new InvalidDomainException(
+        `The order is in status ${values.status} but does not have an assigned employee`,
+      );
     }
   }
 }

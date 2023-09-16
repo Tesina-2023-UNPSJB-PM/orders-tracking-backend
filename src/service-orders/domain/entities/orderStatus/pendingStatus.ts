@@ -11,5 +11,13 @@ export class PendingStatus implements OrderServiceStatus {
   getNextStates(): OrderStatus[] {
     return [OrderStatus.UNASSIGNED, OrderStatus.DONE, OrderStatus.CANCELED];
   }
+
+  isValidStatusChange(targetStatus: OrderStatus): boolean {
+    return (
+      this.getValue() === targetStatus ||
+      this.getNextStates().includes(targetStatus)
+    );
+  }
+
   notifyStatusChange: () => void;
 }

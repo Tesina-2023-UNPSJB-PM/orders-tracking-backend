@@ -25,8 +25,12 @@ export class OrderExecution extends Entity<OrderExecutionProps> {
     return this.props.observations;
   }
 
-  get executor(): Employee | undefined {
-    return this.props.executor;
+  get executor(): Employee {
+    return this.props.executor ?? ({} as Employee);
+  }
+
+  set executor(employee: Employee) {
+    this.props.executor = employee;
   }
 
   get assignedSector(): Sector | undefined {

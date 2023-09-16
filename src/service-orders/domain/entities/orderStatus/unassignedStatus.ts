@@ -11,5 +11,13 @@ export class UnassignedStatus implements OrderServiceStatus {
   getNextStates(): OrderStatus[] {
     return [OrderStatus.PENDING, OrderStatus.CANCELED];
   }
+
+  isValidStatusChange(targetStatus: OrderStatus): boolean {
+    return (
+      this.getValue() === targetStatus ||
+      this.getNextStates().includes(targetStatus)
+    );
+  }
+
   notifyStatusChange: () => void;
 }

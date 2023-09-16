@@ -61,7 +61,8 @@ export class MapperServiceOrderPersistent {
           entityValues.execution,
         )
       : undefined;
-    result.customer = { id: entityValues.customerId };
+    const customerId = entityValues.customerId ?? entityValues.customer?.id;
+    result.customer = { id: customerId };
     result.destination = entityValues.destination
       ? this.mapperOrderLocation.mapToOrderLocationPersistent(
           entityValues.destination,

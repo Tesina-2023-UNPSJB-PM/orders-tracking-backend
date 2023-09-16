@@ -12,5 +12,12 @@ export class DoneStatus implements OrderServiceStatus {
     return [];
   }
 
+  isValidStatusChange(targetStatus: OrderStatus): boolean {
+    return (
+      this.getValue() === targetStatus ||
+      this.getNextStates().includes(targetStatus)
+    );
+  }
+
   notifyStatusChange: () => void;
 }

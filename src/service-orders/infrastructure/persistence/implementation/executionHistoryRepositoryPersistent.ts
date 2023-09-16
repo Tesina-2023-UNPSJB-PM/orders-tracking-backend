@@ -13,7 +13,7 @@ export class ExecutionHistoryRepositoryPersistent
   implements ExecutionHistoryRepository
 {
   private mapperServiceOrder: MapperServiceOrderPersistent;
-  
+
   constructor(
     @InjectRepository(ExecutionHistoryPersistent)
     private repository: Repository<ExecutionHistoryPersistent>,
@@ -40,30 +40,7 @@ export class ExecutionHistoryRepositoryPersistent
   }
 
   async save(entity: ExecutionHistoryPersistent): Promise<number> {
-    let orderPersistent = await this.repoServiceOrder.findOneBy({
-      execution: { id: entity.execution.id },
-    });
-
-    if (!orderPersistent)
-      throw new InvalidDomainException(
-        `The execution service order with id ${entity.execution.id} was not found`,
-      );
-
-    const orderEntity =
-      this.mapperServiceOrder.mapToServiceOrder(orderPersistent);
-
-    await this.repository.queryRunner?.startTransaction();
-
-    if (orderEntity.status != entity.status) {
-      orderEntity.changeStatus(entity.status);
-      orderPersistent =
-        this.mapperServiceOrder.mapToServiceOrderPersistent(orderEntity);
-      this.repoServiceOrder.save(orderPersistent);
-    }
-
     const entitySaved = await this.repository.save(entity);
-
-    await this.repository.queryRunner?.commitTransaction();
 
     return entitySaved.id ?? -1;
   }

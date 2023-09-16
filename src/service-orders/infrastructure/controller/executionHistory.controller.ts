@@ -4,6 +4,7 @@ import {
   Get,
   Header,
   Param,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -11,8 +12,9 @@ import { ApiConsumes } from '@nestjs/swagger';
 import { CrudExecutionHistory } from 'src/service-orders/application/useCases/executionHistory/crudExecutionHistory';
 import { GetHistoryByExecution } from 'src/service-orders/application/useCases/executionHistory/getHistoryByExecution';
 import { UploadAttachment } from 'src/service-orders/application/useCases/executionHistory/uploadAttachment';
-import { ExecutionHistoryRequestDTO } from 'src/service-orders/dto/executionHistory/executionHistoryRequest.dto';
+import { CreateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/createExecutionHistory.dto';
 import { ExecutionHistoryResponseDTO } from 'src/service-orders/dto/executionHistory/executionHistoryResponse.dto';
+import { UpdateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/updateExecutionHistory.dto';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 
 @Controller('/tracking-so/execution-history')
@@ -24,16 +26,16 @@ export class ExecutionHistoryController {
   ) {}
 
   @Post()
-  create(@Body() req: ExecutionHistoryRequestDTO): Promise<number> {
+  create(@Body() req: CreateExecutionHistoryDTO): Promise<number> {
     return this.crudExecutionHistoryCommand.create(req);
   }
 
-  /*@Patch()
-  update(@Body() req: ExecutionHistoryRequestDTO): Promise<void> {
+  @Patch()
+  update(@Body() req: UpdateExecutionHistoryDTO): Promise<void> {
     return this.crudExecutionHistoryCommand.update(req);
   }
 
-  @Delete(':id')
+  /*@Delete(':id')
   delete(@Param() paramId: string): Promise<void> {
     const id = this.convertParamToNumber(paramId);
     return this.crudExecutionHistoryCommand.delete(id);

@@ -11,5 +11,13 @@ export class CanceledStatus implements OrderServiceStatus {
   getNextStates(): OrderStatus[] {
     return [];
   }
+
+  isValidStatusChange(targetStatus: OrderStatus): boolean {
+    return (
+      this.getValue() === targetStatus ||
+      this.getNextStates().includes(targetStatus)
+    );
+  }
+
   notifyStatusChange: () => void;
 }

@@ -1,8 +1,9 @@
 import { OrderEnumsUtils } from 'src/service-orders/domain/enums/service-order-enums';
 import { ExecutionHistoryRepository } from 'src/service-orders/domain/repositories/executionHistoryRepository';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
-import { ExecutionHistoryRequestDTO } from 'src/service-orders/dto/executionHistory/executionHistoryRequest.dto';
+import { CreateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/createExecutionHistory.dto';
 import { ExecutionHistoryResponseDTO } from 'src/service-orders/dto/executionHistory/executionHistoryResponse.dto';
+import { UpdateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/updateExecutionHistory.dto';
 import { ExecutionHistoryPersistent } from 'src/service-orders/infrastructure/persistence/entities/executionHistoryPersistent';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 
@@ -12,32 +13,45 @@ export class MapperExecutionHistory {
     private repoOrderService: ServiceOrderRepository,
   ) {}
 
-  public async mapToEntityPersistent(
-    request: ExecutionHistoryRequestDTO,
+  public async mapCreateRequestToEntityPersistent(
+    request: CreateExecutionHistoryDTO,
   ): Promise<ExecutionHistoryPersistent> {
     const execution = await this.repoOrderService.getOrderExecutionById(
-      request.executionId,
+      request.executionId ?? 0,
     );
     if (!execution)
       throw new InvalidDomainException(
-        `Execution with id ${request.id} does not exist`,
+        `Execution with id ${request.executionId} does not exist`,
       );
 
-    const reason = await this.repo.getReasonStatusById(request.reasonId);
-
-    if (!reason)
-      throw new InvalidDomainException(
-        `Reason with id ${request.reasonId} does not exist`,
-      );
+    const reason = await this.getReasonPersistent(request.reasonId);
 
     const result = new ExecutionHistoryPersistent();
     result.execution = execution;
     result.reason = reason;
-    result.observations = request.observations;
-    result.status = OrderEnumsUtils.getOrderStatus(request.status);
+    result.observations = request.observations ?? '';
+    result.status = OrderEnumsUtils.getOrderStatus(request.newStatus);
+    result.registrationDate = new Date();
+    result.attachments = request.attachments ?? '';
+
+    return result;
+  }
+
+  public async mapUpdateRequestToEntityPersistent(
+    request: UpdateExecutionHistoryDTO,
+  ): Promise<ExecutionHistoryPersistent> {
+    let reason;
+    if (request.reasonId) {
+      reason = await this.getReasonPersistent(request.reasonId);
+    }
+
+    const result = new ExecutionHistoryPersistent();
     result.id = request.id;
-    result.registrationDate = request.registrationDate;
-    result.attachments = request.attachments;
+    if (reason) {
+      result.reason = reason;
+    }
+    result.attachments = request.attachment ?? '';
+    result.observations = request.observations ?? '';
 
     return result;
   }
@@ -55,5 +69,15 @@ export class MapperExecutionHistory {
     result.reason = entity.reason;
 
     return result;
+  }
+
+  private async getReasonPersistent(reasonId: number) {
+    const reason = await this.repo.getReasonStatusById(reasonId);
+
+    if (!reason)
+      throw new InvalidDomainException(
+        `Reason with id ${reasonId} does not exist`,
+      );
+    return reason;
   }
 }
