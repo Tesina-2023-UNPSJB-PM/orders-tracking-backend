@@ -10,6 +10,7 @@ import { PersistentExceptionFilter } from './shared/infrastructure/filters/persi
 import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
 import { UserNotFoundExceptionFilter } from './shared/infrastructure/filters/userNotFoundException.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { json, urlencoded } from 'express';
 
 const BASE_URL = '/api';
 
@@ -51,7 +52,7 @@ async function bootstrap() {
     logger: ['verbose'],
   });
 
-  app.useBodyParser('text');
+  app.useBodyParser('text', {limit: '50mb'});
 
   app.setGlobalPrefix(BASE_URL);
 
@@ -59,6 +60,9 @@ async function bootstrap() {
 
   configExceptionFilters(app);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   const configService = app.get(ConfigService);
   const portApp = configService.get('SERVER_PORT');
