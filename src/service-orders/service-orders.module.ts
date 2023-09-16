@@ -23,6 +23,13 @@ import { AddressPersistent } from 'src/shared/infrastructure/entitiesDB/addressP
 import { MapperCustomerPersistent } from './infrastructure/persistence/mappers/mapperCustomerPersistent';
 import { GetByFilterServiceOrder } from './application/useCases/getByFilterServiceOrder';
 import { GetSummaryOrders } from './application/useCases/GetSummaryOrders';
+import { ExecutionHistoryRepositoryPersistent } from './infrastructure/persistence/implementation/executionHistoryRepositoryPersistent';
+import { ExecutionHistoryPersistent } from './infrastructure/persistence/entities/executionHistoryPersistent';
+import { ReasonStatusPersistent } from './infrastructure/persistence/entities/reasonStatusPersistent';
+import { ExecutionHistoryController } from './infrastructure/controller/executionHistory.controller';
+import { CrudExecutionHistory } from './application/useCases/executionHistory/crudExecutionHistory';
+import { GetHistoryByExecution } from './application/useCases/executionHistory/getHistoryByExecution';
+import { UploadAttachment } from './application/useCases/executionHistory/uploadAttachment';
 
 const repositoriesProvider = [
   {
@@ -41,10 +48,14 @@ const repositoriesProvider = [
     provide: 'OrderTypeRepository',
     useClass: OrderTypeRepositoryPersistent,
   },
+  {
+    provide: 'ExecutionHistoryRepository',
+    useClass: ExecutionHistoryRepositoryPersistent,
+  },
 ];
 
 @Module({
-  controllers: [ServiceOrdersController],
+  controllers: [ServiceOrdersController, ExecutionHistoryController],
   providers: [
     ...repositoriesProvider,
     CreateServiceOrder,
@@ -57,6 +68,9 @@ const repositoriesProvider = [
     OrderExecutionFactory,
     ServiceOrderFactory,
     MapperCustomerPersistent,
+    CrudExecutionHistory,
+    GetHistoryByExecution,
+    UploadAttachment,
   ],
   imports: [
     CustomersModule,
@@ -68,6 +82,8 @@ const repositoriesProvider = [
       OrderExecutionPersistent,
       OrderLocationPersistent,
       AddressPersistent,
+      ExecutionHistoryPersistent,
+      ReasonStatusPersistent,
     ]),
   ],
 })

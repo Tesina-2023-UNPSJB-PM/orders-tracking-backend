@@ -1,20 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  Logger,
-  ValidationPipe,
-} from '@nestjs/common';
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 
 import { InvalidDomainExceptionFilter } from './shared/infrastructure/filters/invalid-domain-exception.filter';
 import { PersistentExceptionFilter } from './shared/infrastructure/filters/persistent-exception.filter';
 import { CustomerExceptionsFilter } from './customers/infrastructure/filters/customer-exceptions.filter';
-import { UserDTO } from './users/dto/user.dto';
 import { UserNotFoundExceptionFilter } from './shared/infrastructure/filters/userNotFoundException.filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 const BASE_URL = '/api';
 
@@ -52,9 +47,11 @@ function configExceptionFilters(app: INestApplication) {
 
 async function bootstrap() {
   setTimezone();
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['verbose'],
   });
+
+  app.useBodyParser('text');
 
   app.setGlobalPrefix(BASE_URL);
 

@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { log } from 'console';
 import { CustomerPersistent } from 'src/customers/infrastructure/persistence/entitiesDB/customerPersistent';
 import { MasterDataCustomerMapper } from 'src/master-data/application/mappers/customers.mapper';
 import { MasterDataEmployeesMapper } from 'src/master-data/application/mappers/employees.mapper';
 import { MasterDataOrderTypeMapper } from 'src/master-data/application/mappers/order-type.mapper';
+import { MasterDataReasonMapper } from 'src/master-data/application/mappers/reasons.mapper';
 import { MasterDataRepository } from 'src/master-data/domain/repositories/masterDataRepository';
 import { MasterDataCustomerDTO } from 'src/master-data/dto/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/master-data/dto/master-data-employee.dto';
@@ -12,8 +12,10 @@ import { MasterDataOrderStatusDTO } from 'src/master-data/dto/master-data-order-
 import { MasterDataOrderTypeDTO } from 'src/master-data/dto/master-data-order-type.dto';
 import { MasterDataResponse } from 'src/master-data/dto/master-data-resp.dto';
 import { OrderStates } from 'src/service-orders/domain/enums/service-order-enums';
+import { ReasonStatusDTO } from 'src/service-orders/dto/executionHistory/reasonStatus.dto';
 import { EmployeePersistent } from 'src/service-orders/infrastructure/persistence/entities/employeePersistent';
 import { OrderTypePersistent } from 'src/service-orders/infrastructure/persistence/entities/orderTypePersistent';
+import { ReasonStatusPersistent } from 'src/service-orders/infrastructure/persistence/entities/reasonStatusPersistent';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -24,6 +26,7 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
     private masterDataCustomerMapper: MasterDataCustomerMapper,
     private masterDataEmployeesMapper: MasterDataEmployeesMapper,
     private masterDataOrderTypeMapper: MasterDataOrderTypeMapper,
+    private masterDataReasonMapper: MasterDataReasonMapper,
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
@@ -39,12 +42,20 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
       this.getServiceOrderTypes(),
       this.getCustomers(),
       this.getEmployees(),
+      this.getReasons(),
     ]).then(
-      ([serviceOrderStates, serviceOrderTypes, customers, employees]) => ({
+      ([
         serviceOrderStates,
         serviceOrderTypes,
         customers,
         employees,
+        reasons,
+      ]) => ({
+        serviceOrderStates,
+        serviceOrderTypes,
+        customers,
+        employees,
+        reasons,
       }),
     );
   }
@@ -109,5 +120,16 @@ export class MasterDataRepositoryPersistent implements MasterDataRepository {
         }
         return null;
       });
+  }
+
+  private async getReasons(): Promise<ReasonStatusDTO[]> {
+    return this.dataSource
+      .createQueryBuilder()
+      .select('*')
+      .from(ReasonStatusPersistent, 'reasons')
+      .getRawMany()
+      .then((reasons) =>
+        this.masterDataReasonMapper.mapToReasonsResponseDTO(reasons),
+      );
   }
 }
