@@ -8,6 +8,7 @@ import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDoma
 import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { EmployeeRepository } from 'src/service-orders/domain/repositories/employeeRepository';
 import { UpdateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/updateExecutionHistory.dto';
+import { ServiceOrder } from 'src/service-orders/domain/entities/serviceOrder.entity';
 
 @Injectable()
 export class CrudExecutionHistory {
@@ -26,6 +27,20 @@ export class CrudExecutionHistory {
 
   async create(request: CreateExecutionHistoryDTO): Promise<number> {
     // Recuperar Orden de servicio
+    const serviceOrder = await this.getServiceOrder(request);
+
+    // Actualizar la OS si corresponde
+    await this.updateOrderIfApplicable(request, serviceOrder);
+
+    // Guardar historico
+    request.executionId = serviceOrder.getValues().execution?.id;
+    const executionHistoryPersistent =
+      await this.mapper.mapCreateRequestToEntityPersistent(request);
+
+    return this.repo.save(executionHistoryPersistent);
+  }
+
+  private async getServiceOrder(request: CreateExecutionHistoryDTO) {
     const serviceOrder = await this.repoOrderService.getById(
       request.serviceOrderId,
     );
@@ -33,13 +48,21 @@ export class CrudExecutionHistory {
       throw new InvalidDomainException(
         `Service order with id ${request.serviceOrderId} no exist`,
       );
+    return serviceOrder;
+  }
 
-    // Actualizar la OS si corresponde
-    if (request.newStatus !== serviceOrder.status) {
+  private async updateOrderIfApplicable(
+    request: CreateExecutionHistoryDTO,
+    serviceOrder: ServiceOrder,
+  ) {
+    let updateOrder = false;
+    if (request.newStatus && request.newStatus !== serviceOrder.status) {
       serviceOrder.changeStatus(request.newStatus);
+      updateOrder = true;
     }
 
     if (
+      request.newStatus &&
       request.newStatus === OrderStatus.PENDING &&
       request.assignedEmployeeId
     ) {
@@ -55,16 +78,12 @@ export class CrudExecutionHistory {
       if (orderExecution) {
         orderExecution.executor = employeeAssigned;
       }
+      updateOrder = true;
     }
 
-    this.repoOrderService.update(serviceOrder);
-
-    // Guardar historico
-    request.executionId = serviceOrder.getValues().execution?.id;
-    const executionHistoryPersistent =
-      await this.mapper.mapCreateRequestToEntityPersistent(request);
-
-    return this.repo.save(executionHistoryPersistent);
+    if (updateOrder) {
+      this.repoOrderService.update(serviceOrder);
+    }
   }
 
   async update(request: UpdateExecutionHistoryDTO): Promise<void> {
