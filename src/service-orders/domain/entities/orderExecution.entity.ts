@@ -25,11 +25,11 @@ export class OrderExecution extends Entity<OrderExecutionProps> {
     return this.props.observations;
   }
 
-  get executor(): Employee {
+  get executor(): Employee | undefined {
     return this.props.executor ?? ({} as Employee);
   }
 
-  set executor(employee: Employee) {
+  set executor(employee: Employee | undefined) {
     this.props.executor = employee;
   }
 

@@ -7,6 +7,7 @@ import { OrderExecution } from './orderExecution.entity';
 import { Customer } from 'src/customers/domain/entities/customer.entity';
 import { OrderServiceStatus } from './orderStatus/orderStatus.interface';
 import { StatusFactory } from './orderStatus/statusFactory';
+import { Employee } from './employee.entity';
 
 export interface ServiceOrderProps {
   number?: string;
@@ -52,12 +53,32 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     if (!this.orderStatus)
       throw new InvalidDomainException(`Undefined order status`);
 
+    if (newStatus === this.status) return;
+
     const isStatusValid = this.orderStatus.isValidStatusChange(newStatus);
 
     if (!isStatusValid) throw new InvalidDomainException(`New invalid status`);
 
     this.orderStatus = StatusFactory.createOrderStatus(newStatus, this);
     this.getValues().status = newStatus;
+  }
+
+  assignToEmployee(employee: Employee) {
+    if (this.status !== OrderStatus.UNASSIGNED) return;
+    this.changeStatus(OrderStatus.PENDING);
+
+    const orderExecution = this.getValues().execution;
+    if (orderExecution) {
+      orderExecution.executor = employee;
+    }
+  }
+
+  releaseOrder() {
+    this.changeStatus(OrderStatus.UNASSIGNED);
+    const orderExecution = this.getValues().execution;
+    if (orderExecution) {
+      orderExecution.executor = undefined;
+    }
   }
 
   /**
@@ -118,7 +139,7 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
 
     if (
       values.status !== OrderStatus.UNASSIGNED &&
-      !values.execution?.executor.id
+      !values.execution?.executor?.id
     ) {
       throw new InvalidDomainException(
         `The order is in status ${values.status} but does not have an assigned employee`,

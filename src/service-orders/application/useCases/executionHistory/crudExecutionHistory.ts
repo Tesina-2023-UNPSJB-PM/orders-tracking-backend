@@ -56,16 +56,20 @@ export class CrudExecutionHistory {
     serviceOrder: ServiceOrder,
   ) {
     let updateOrder = false;
-    if (request.newStatus && request.newStatus !== serviceOrder.status) {
-      serviceOrder.changeStatus(request.newStatus);
-      updateOrder = true;
-    }
+    const isAssignOrder =
+      request.status === OrderStatus.PENDING &&
+      serviceOrder.status === OrderStatus.UNASSIGNED;
 
-    if (
-      request.newStatus &&
-      request.newStatus === OrderStatus.PENDING &&
-      request.assignedEmployeeId
-    ) {
+    const isReleaseOrder =
+      request.status === OrderStatus.UNASSIGNED &&
+      serviceOrder.status === OrderStatus.PENDING;
+
+    const isOrderStatusChange =
+      request.status !== serviceOrder.status &&
+      !isAssignOrder &&
+      !isReleaseOrder;
+
+    if (isAssignOrder) {
       const employeeAssigned = await this.repoEmployee.getById(
         request.assignedEmployeeId,
       );
@@ -74,10 +78,17 @@ export class CrudExecutionHistory {
           `Employee with id ${request.assignedEmployeeId} not exist`,
         );
 
-      const orderExecution = serviceOrder.getValues().execution;
-      if (orderExecution) {
-        orderExecution.executor = employeeAssigned;
-      }
+      serviceOrder.assignToEmployee(employeeAssigned);
+      updateOrder = true;
+    }
+
+    if (isReleaseOrder) {
+      serviceOrder.releaseOrder();
+      updateOrder = true;
+    }
+
+    if (isOrderStatusChange) {
+      serviceOrder.changeStatus(request.status);
       updateOrder = true;
     }
 
