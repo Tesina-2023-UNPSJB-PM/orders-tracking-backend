@@ -3,12 +3,13 @@ import {
   Controller,
   Get,
   Header,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiResponse } from '@nestjs/swagger';
 import { CrudExecutionHistory } from 'src/service-orders/application/useCases/executionHistory/crudExecutionHistory';
 import { GetHistoryByExecution } from 'src/service-orders/application/useCases/executionHistory/getHistoryByExecution';
 import { UploadAttachment } from 'src/service-orders/application/useCases/executionHistory/uploadAttachment';
@@ -42,6 +43,7 @@ export class ExecutionHistoryController {
   }*/
 
   @Get(':id')
+  @ApiResponse({ status: HttpStatus.OK, type: ExecutionHistoryResponseDTO })
   getById(
     @Param('id') paramId: string,
   ): Promise<ExecutionHistoryResponseDTO | null> {
@@ -50,6 +52,7 @@ export class ExecutionHistoryController {
   }
 
   @Get()
+  @ApiResponse({ status: HttpStatus.OK, type: ExecutionHistoryResponseDTO })
   getByExecutionId(
     @Query('executionId') id: string,
   ): Promise<ExecutionHistoryResponseDTO[]> {

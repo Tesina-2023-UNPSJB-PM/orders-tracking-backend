@@ -85,6 +85,7 @@ export class MapperServiceOrder {
   ): OrderExecutionDTO {
     const result = new OrderExecutionDTO();
     if (execution) {
+      result.id = execution.id;
       result.executorEmployeId = execution.executor?.id;
       result.assignedSectorId = execution.assignedSector?.id;
       result.observations = execution.observations;
