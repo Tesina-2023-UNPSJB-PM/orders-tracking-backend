@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 
 export interface ServiceOrderHistory {
@@ -14,7 +15,8 @@ export class CreateExecutionHistoryDTO {
   @ApiProperty()
   assignedEmployeeId?: number;
   @ApiProperty()
-  newStatus: OrderStatus;
+  @IsNotEmpty()
+  status: OrderStatus;
   @ApiProperty()
   reasonId: number;
   @ApiProperty()

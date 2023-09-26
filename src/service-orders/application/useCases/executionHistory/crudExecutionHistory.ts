@@ -8,6 +8,7 @@ import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDoma
 import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { EmployeeRepository } from 'src/service-orders/domain/repositories/employeeRepository';
 import { UpdateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/updateExecutionHistory.dto';
+import { ServiceOrder } from 'src/service-orders/domain/entities/serviceOrder.entity';
 
 @Injectable()
 export class CrudExecutionHistory {
@@ -26,6 +27,20 @@ export class CrudExecutionHistory {
 
   async create(request: CreateExecutionHistoryDTO): Promise<number> {
     // Recuperar Orden de servicio
+    const serviceOrder = await this.getServiceOrder(request);
+
+    // Actualizar la OS si corresponde
+    await this.updateOrderIfApplicable(request, serviceOrder);
+
+    // Guardar historico
+    request.executionId = serviceOrder.getValues().execution?.id;
+    const executionHistoryPersistent =
+      await this.mapper.mapCreateRequestToEntityPersistent(request);
+
+    return this.repo.save(executionHistoryPersistent);
+  }
+
+  private async getServiceOrder(request: CreateExecutionHistoryDTO) {
     const serviceOrder = await this.repoOrderService.getById(
       request.serviceOrderId,
     );
@@ -33,16 +48,28 @@ export class CrudExecutionHistory {
       throw new InvalidDomainException(
         `Service order with id ${request.serviceOrderId} no exist`,
       );
+    return serviceOrder;
+  }
 
-    // Actualizar la OS si corresponde
-    if (request.newStatus !== serviceOrder.status) {
-      serviceOrder.changeStatus(request.newStatus);
-    }
+  private async updateOrderIfApplicable(
+    request: CreateExecutionHistoryDTO,
+    serviceOrder: ServiceOrder,
+  ) {
+    let updateOrder = false;
+    const isAssignOrder =
+      request.status === OrderStatus.PENDING &&
+      serviceOrder.status === OrderStatus.UNASSIGNED;
 
-    if (
-      request.newStatus === OrderStatus.PENDING &&
-      request.assignedEmployeeId
-    ) {
+    const isReleaseOrder =
+      request.status === OrderStatus.UNASSIGNED &&
+      serviceOrder.status === OrderStatus.PENDING;
+
+    const isOrderStatusChange =
+      request.status !== serviceOrder.status &&
+      !isAssignOrder &&
+      !isReleaseOrder;
+
+    if (isAssignOrder) {
       const employeeAssigned = await this.repoEmployee.getById(
         request.assignedEmployeeId,
       );
@@ -51,20 +78,23 @@ export class CrudExecutionHistory {
           `Employee with id ${request.assignedEmployeeId} not exist`,
         );
 
-      const orderExecution = serviceOrder.getValues().execution;
-      if (orderExecution) {
-        orderExecution.executor = employeeAssigned;
-      }
+      serviceOrder.assignToEmployee(employeeAssigned);
+      updateOrder = true;
     }
 
-    this.repoOrderService.update(serviceOrder);
+    if (isReleaseOrder) {
+      serviceOrder.releaseOrder();
+      updateOrder = true;
+    }
 
-    // Guardar historico
-    request.executionId = serviceOrder.getValues().execution?.id;
-    const executionHistoryPersistent =
-      await this.mapper.mapCreateRequestToEntityPersistent(request);
+    if (isOrderStatusChange) {
+      serviceOrder.changeStatus(request.status);
+      updateOrder = true;
+    }
 
-    return this.repo.save(executionHistoryPersistent);
+    if (updateOrder) {
+      this.repoOrderService.update(serviceOrder);
+    }
   }
 
   async update(request: UpdateExecutionHistoryDTO): Promise<void> {

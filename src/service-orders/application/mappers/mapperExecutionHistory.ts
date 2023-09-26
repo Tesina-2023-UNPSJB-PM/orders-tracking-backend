@@ -30,7 +30,7 @@ export class MapperExecutionHistory {
     result.execution = execution;
     result.reason = reason;
     result.observations = request.observations ?? '';
-    result.status = OrderEnumsUtils.getOrderStatus(request.newStatus);
+    result.status = OrderEnumsUtils.getOrderStatus(request.status);
     result.registrationDate = new Date();
     result.attachments = request.attachments ?? '';
 
