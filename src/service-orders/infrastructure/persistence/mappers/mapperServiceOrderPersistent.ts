@@ -69,6 +69,7 @@ export class MapperServiceOrderPersistent {
         )
       : undefined;
 
+    result.detail = entityValues.detail;
     return result;
   }
 }

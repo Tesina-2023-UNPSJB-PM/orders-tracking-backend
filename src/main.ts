@@ -56,12 +56,16 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
+
   app.setGlobalPrefix(BASE_URL);
 
   configDocumentApi(app);
 
   configExceptionFilters(app);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   const configService = app.get(ConfigService);
   const portApp = configService.get('SERVER_PORT');
