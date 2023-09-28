@@ -49,6 +49,10 @@ export class OrderExecution extends Entity<OrderExecutionProps> {
     return this.props.resolutionTime;
   }
 
+  set resolutionTime(date: Date) {
+    this.props.resolutionTime = date;
+  }
+
   public static create(
     values: OrderExecutionProps,
     id?: number,
