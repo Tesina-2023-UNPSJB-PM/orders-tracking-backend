@@ -41,6 +41,10 @@ export class OrderExecution extends Entity<OrderExecutionProps> {
     return this.props.assignedTime;
   }
 
+  set assignedTime(value: Date | undefined) {
+    this.props.assignedTime = value;
+  }
+
   get estimatedResolutionTime(): Date | undefined {
     return this.props.estimatedResolutionTime;
   }
@@ -49,7 +53,7 @@ export class OrderExecution extends Entity<OrderExecutionProps> {
     return this.props.resolutionTime;
   }
 
-  set resolutionTime(date: Date) {
+  set resolutionTime(date: Date | undefined) {
     this.props.resolutionTime = date;
   }
 
