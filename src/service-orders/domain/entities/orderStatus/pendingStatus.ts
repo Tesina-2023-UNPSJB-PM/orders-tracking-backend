@@ -1,3 +1,4 @@
+import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
 import { OrderStatus } from '../../enums/service-order-enums';
 import { ServiceOrder } from '../serviceOrder.entity';
 import { OrderServiceStatus } from './orderStatus.interface';
@@ -19,5 +20,14 @@ export class PendingStatus implements OrderServiceStatus {
     );
   }
 
-  notifyStatusChange: () => void;
+  getPayloadNotification(): PayloadNotification {
+    const executor = this.context.getValues().execution?.executor;
+    const fullNameEmployee = `${executor?.firstName} ${executor?.lastName}`;
+    return {
+      title: 'Orden asignada',
+      body: `Orden ${
+        this.context.getValues().number
+      } asignada a ${fullNameEmployee}`,
+    };
+  }
 }

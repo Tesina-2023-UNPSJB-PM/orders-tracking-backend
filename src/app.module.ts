@@ -44,5 +44,6 @@ const configPath = path.join(
     MasterDataModule,
     AuthModule,
   ],
+  exports: [ConfigModule],
 })
 export class AppModule {}

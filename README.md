@@ -65,7 +65,7 @@ $ npm run test:cov
 - ```docker run -d -p 5000:5000 --restart always --name registry-local -v XXX/YYY:/var/lib/registry registry```
 
 ### Creación y push de la imagen del proyecto
-- ```docker build -t orders-tracking-back . ```
+- ```docker image build -t orders-tracking-back . ```
 - ```docker tag orders-tracking-back orders-tracking-back:latest```
 - ```docker image push localhost:5000/orders-tracking-back:latest```
 

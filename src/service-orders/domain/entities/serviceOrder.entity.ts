@@ -8,6 +8,7 @@ import { Customer } from 'src/customers/domain/entities/customer.entity';
 import { OrderServiceStatus } from './orderStatus/orderStatus.interface';
 import { StatusFactory } from './orderStatus/statusFactory';
 import { Employee } from './employee.entity';
+import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
 
 export interface ServiceOrderProps {
   number?: string;
@@ -61,6 +62,13 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
 
     this.orderStatus = StatusFactory.createOrderStatus(newStatus, this);
     this.getValues().status = newStatus;
+
+    if (newStatus === OrderStatus.DONE) {
+      const execution = this.getValues().execution;
+      if (execution) {
+        execution.resolutionTime = new Date();
+      }
+    }
   }
 
   assignToEmployee(employee: Employee) {
@@ -79,6 +87,10 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     if (orderExecution) {
       orderExecution.executor = undefined;
     }
+  }
+
+  getPayloadNotification(): PayloadNotification | undefined {
+    return this.orderStatus.getPayloadNotification();
   }
 
   /**

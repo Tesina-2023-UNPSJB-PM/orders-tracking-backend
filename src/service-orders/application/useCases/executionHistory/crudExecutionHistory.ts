@@ -9,6 +9,7 @@ import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums
 import { EmployeeRepository } from 'src/service-orders/domain/repositories/employeeRepository';
 import { UpdateExecutionHistoryDTO } from 'src/service-orders/dto/executionHistory/updateExecutionHistory.dto';
 import { ServiceOrder } from 'src/service-orders/domain/entities/serviceOrder.entity';
+import { PubNubClient } from 'src/service-orders/infrastructure/client/pubnub.client';
 
 @Injectable()
 export class CrudExecutionHistory {
@@ -21,6 +22,7 @@ export class CrudExecutionHistory {
     private repoOrderService: ServiceOrderRepository,
     @Inject('EmployeeRepository')
     private repoEmployee: EmployeeRepository,
+    private notifier: PubNubClient,
   ) {
     this.mapper = new MapperExecutionHistory(repo, repoOrderService);
   }
@@ -94,6 +96,14 @@ export class CrudExecutionHistory {
 
     if (updateOrder) {
       this.repoOrderService.update(serviceOrder);
+      this.notifyOrderUpdate(serviceOrder);
+    }
+  }
+
+  private notifyOrderUpdate(serviceOrder: ServiceOrder) {
+    const payloadNotification = serviceOrder.getPayloadNotification();
+    if (payloadNotification) {
+      this.notifier.sendNotification(payloadNotification);
     }
   }
 

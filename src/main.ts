@@ -56,7 +56,6 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
-
   app.setGlobalPrefix(BASE_URL);
 
   configDocumentApi(app);

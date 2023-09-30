@@ -30,6 +30,7 @@ import { ExecutionHistoryController } from './infrastructure/controller/executio
 import { CrudExecutionHistory } from './application/useCases/executionHistory/crudExecutionHistory';
 import { GetHistoryByExecution } from './application/useCases/executionHistory/getHistoryByExecution';
 import { UploadAttachment } from './application/useCases/executionHistory/uploadAttachment';
+import { PubNubClient } from './infrastructure/client/pubnub.client';
 
 const repositoriesProvider = [
   {
@@ -71,6 +72,7 @@ const repositoriesProvider = [
     CrudExecutionHistory,
     GetHistoryByExecution,
     UploadAttachment,
+    PubNubClient,
   ],
   imports: [
     CustomersModule,

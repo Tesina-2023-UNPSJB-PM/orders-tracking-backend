@@ -1,7 +1,8 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ExecutionHistoryRepository } from 'src/service-orders/domain/repositories/executionHistoryRepository';
 import { InvalidDomainException } from 'src/shared/domain/exceptions/invalidDomain.error';
 
+@Injectable()
 export class UploadAttachment {
   constructor(
     @Inject('ExecutionHistoryRepository')
