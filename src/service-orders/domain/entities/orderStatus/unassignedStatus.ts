@@ -1,4 +1,4 @@
-import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
+import { Notification } from 'src/service-orders/infrastructure/client/pubnub.client';
 import { OrderStatus } from '../../enums/service-order-enums';
 import { ServiceOrder } from '../serviceOrder.entity';
 import { OrderServiceStatus } from './orderStatus.interface';
@@ -20,7 +20,7 @@ export class UnassignedStatus implements OrderServiceStatus {
     );
   }
 
-  getPayloadNotification(): PayloadNotification | undefined {
+  getNotification(): Notification | undefined {
     return;
   }
 }

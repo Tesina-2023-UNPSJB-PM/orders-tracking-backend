@@ -1,4 +1,7 @@
-import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
+import {
+  GLOBAL_CHANNEL,
+  Notification,
+} from 'src/service-orders/infrastructure/client/pubnub.client';
 import { OrderStatus } from '../../enums/service-order-enums';
 import { ServiceOrder } from '../serviceOrder.entity';
 import { OrderServiceStatus } from './orderStatus.interface';
@@ -20,10 +23,13 @@ export class DoneStatus implements OrderServiceStatus {
     );
   }
 
-  getPayloadNotification(): PayloadNotification {
+  getNotification(): Notification {
     return {
-      title: 'Orden finalizada',
-      body: `La orden ${this.context.getValues().number} a sido finalizada`,
+      channel: GLOBAL_CHANNEL,
+      payload: {
+        title: 'Orden finalizada',
+        body: `La orden ${this.context.getValues().number} a sido finalizada`,
+      },
     };
   }
 }
