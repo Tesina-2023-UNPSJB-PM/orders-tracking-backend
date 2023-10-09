@@ -101,7 +101,7 @@ export class CrudExecutionHistory {
   }
 
   private notifyOrderUpdate(serviceOrder: ServiceOrder) {
-    const payloadNotification = serviceOrder.getPayloadNotification();
+    const payloadNotification = serviceOrder.getNotification();
     if (payloadNotification) {
       this.notifier.sendNotification(payloadNotification);
     }

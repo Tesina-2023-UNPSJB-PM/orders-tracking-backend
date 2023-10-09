@@ -1,4 +1,7 @@
-import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
+import {
+  GLOBAL_CHANNEL,
+  Notification,
+} from 'src/service-orders/infrastructure/client/pubnub.client';
 import { OrderStatus } from '../../enums/service-order-enums';
 import { ServiceOrder } from '../serviceOrder.entity';
 import { OrderServiceStatus } from './orderStatus.interface';
@@ -20,7 +23,14 @@ export class UnassignedStatus implements OrderServiceStatus {
     );
   }
 
-  getPayloadNotification(): PayloadNotification | undefined {
-    return;
+  getNotification(): Notification | undefined {
+    return {
+      channel: GLOBAL_CHANNEL,
+      payload: {
+        title: 'Orden sin asignar',
+        body: `Se creo la orden ${this.context.id}`,
+      },
+      data: this.context.id,
+    };
   }
 }

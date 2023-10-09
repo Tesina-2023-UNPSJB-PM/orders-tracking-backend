@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
+import {
+  OrderEnumsUtils,
+  OrderPriority,
+  OrderStatus,
+} from 'src/service-orders/domain/enums/service-order-enums';
 import { ServiceOrderRepository } from 'src/service-orders/domain/repositories/serviceOrderRepository';
 import { ServiceOrderResponse } from 'src/service-orders/dto/serviceOrderRes.dto';
 import { SummaryOrdersDTO } from 'src/service-orders/dto/summaryOrdersRes.dto';
@@ -48,7 +52,26 @@ export class GetSummaryOrders {
   private async getAssignedOrders(
     employeeId: number,
   ): Promise<ServiceOrderResponse[]> {
-    return await this.getOrdersByStatus(employeeId, OrderStatus.PENDING);
+    return (await this.getOrdersByStatus(employeeId, OrderStatus.PENDING)).sort(
+      (previous, current) =>
+        this.getPriorityWeight(current.priority) -
+        this.getPriorityWeight(previous.priority),
+    );
+  }
+
+  private getPriorityWeight(value?: string): number {
+    const priority = value
+      ? OrderEnumsUtils.getOrderPriority(value)
+      : OrderPriority.LOW;
+
+    switch (priority) {
+      case OrderPriority.LOW:
+        return 10;
+      case OrderPriority.MEDIUM:
+        return 20;
+      case OrderPriority.HIGH:
+        return 30;
+    }
   }
 
   private async getRecenActivityEmployee(

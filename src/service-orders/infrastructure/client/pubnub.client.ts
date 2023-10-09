@@ -2,11 +2,20 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import Pubnub from 'pubnub';
 
-export interface PayloadNotification {
+interface PayloadNotification {
   title: string;
   subtitle?: string;
   body: string;
 }
+
+export interface Notification {
+  channel: string;
+  payload: PayloadNotification;
+  data?: any;
+}
+
+export const GLOBAL_CHANNEL = 'notifications';
+export const EMPLOYEE_CHANNEL = 'EMPLOYEE_';
 
 @Injectable()
 export class PubNubClient {
@@ -22,12 +31,13 @@ export class PubNubClient {
     });
   }
 
-  sendNotification(payload: PayloadNotification): void {
+  sendNotification(notification: Notification): void {
     const publishPayload = {
-      channel: 'notifications',
+      channel: notification.channel,
       message: {
         pn_gcm: {
-          notification: payload,
+          notification: notification.payload,
+          data: notification.data,
         },
       },
     };

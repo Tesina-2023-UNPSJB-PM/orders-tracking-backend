@@ -12,7 +12,7 @@ export class GetHistoryByExecution {
     @Inject('ExecutionHistoryRepository')
     private repo: ExecutionHistoryRepository,
     @Inject('ServiceOrderRepository')
-    private repoOrderService: ServiceOrderRepository,
+    repoOrderService: ServiceOrderRepository,
   ) {
     this.mapper = new MapperExecutionHistory(repo, repoOrderService);
   }

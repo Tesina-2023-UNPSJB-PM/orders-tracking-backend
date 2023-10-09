@@ -31,19 +31,23 @@ export class CreateServiceOrder {
       }
     }
     // Save entity
-    return this.serviceOrderRepo.save(newServiceOrder).then((id) => {
-      if (isOrderAssigned) {
-        this.notifyAssignedOrder(newServiceOrder);
-      }
+    const id = await this.serviceOrderRepo.save(newServiceOrder);
 
-      return id;
-    });
+    this.notifyNewOrder(id);
+
+    return id;
   }
 
-  private notifyAssignedOrder(serviceOrder: ServiceOrder) {
-    const payloadNotification = serviceOrder.getPayloadNotification();
-    if (payloadNotification) {
-      this.notifier.sendNotification(payloadNotification);
-    }
+  private notifyNewOrder(id: number) {
+    this.serviceOrderRepo.getById(id).then((result) => {
+      if (!result) {
+        return;
+      }
+      const notification = result.getNotification();
+
+      if (notification) {
+        this.notifier.sendNotification(notification);
+      }
+    });
   }
 }

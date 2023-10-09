@@ -8,7 +8,7 @@ import { Customer } from 'src/customers/domain/entities/customer.entity';
 import { OrderServiceStatus } from './orderStatus/orderStatus.interface';
 import { StatusFactory } from './orderStatus/statusFactory';
 import { Employee } from './employee.entity';
-import { PayloadNotification } from 'src/service-orders/infrastructure/client/pubnub.client';
+import { Notification } from 'src/service-orders/infrastructure/client/pubnub.client';
 
 export interface ServiceOrderProps {
   number?: string;
@@ -89,8 +89,8 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     }
   }
 
-  getPayloadNotification(): PayloadNotification | undefined {
-    return this.orderStatus.getPayloadNotification();
+  getNotification(): Notification | undefined {
+    return this.orderStatus.getNotification();
   }
 
   /**
