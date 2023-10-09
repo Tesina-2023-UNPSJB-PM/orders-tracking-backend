@@ -4,12 +4,14 @@ import { ServiceOrderRequest } from 'src/service-orders/dto/serviceOrderReq.dto'
 import { ServiceOrderFactory } from '../factories/serviceOrderFactory';
 import { OrderStatus } from 'src/service-orders/domain/enums/service-order-enums';
 import { ServiceOrder } from 'src/service-orders/domain/entities/serviceOrder.entity';
+import { PubNubClient } from 'src/service-orders/infrastructure/client/pubnub.client';
 @Injectable()
 export class CreateServiceOrder {
   constructor(
     @Inject('ServiceOrderRepository')
     private serviceOrderRepo: ServiceOrderRepository,
     private serviceOrderFactory: ServiceOrderFactory,
+    private notifier: PubNubClient,
   ) {}
 
   async run(request: ServiceOrderRequest): Promise<number> {
@@ -25,7 +27,11 @@ export class CreateServiceOrder {
       }
     }
     // Save entity
-    return this.serviceOrderRepo.save(newServiceOrder);
+    const id = await this.serviceOrderRepo.save(newServiceOrder);
+
+    this.notifyNewOrder(id);
+
+    return id;
   }
 
   private isOrderAssigned(newServiceOrder: ServiceOrder) {
@@ -33,5 +39,18 @@ export class CreateServiceOrder {
       newServiceOrder.status === OrderStatus.PENDING &&
       newServiceOrder.getValues().execution?.executor
     );
+  }
+
+  private notifyNewOrder(id: number) {
+    this.serviceOrderRepo.getById(id).then((result) => {
+      if (!result) {
+        return;
+      }
+      const notification = result.getNotification();
+
+      if (notification) {
+        this.notifier.sendNotification(notification);
+      }
+    });
   }
 }

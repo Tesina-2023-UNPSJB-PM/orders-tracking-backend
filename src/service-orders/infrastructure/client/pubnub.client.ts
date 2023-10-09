@@ -11,6 +11,7 @@ interface PayloadNotification {
 export interface Notification {
   channel: string;
   payload: PayloadNotification;
+  data?: any;
 }
 
 export const GLOBAL_CHANNEL = 'notifications';
@@ -36,6 +37,7 @@ export class PubNubClient {
       message: {
         pn_gcm: {
           notification: notification.payload,
+          data: notification.data,
         },
       },
     };
