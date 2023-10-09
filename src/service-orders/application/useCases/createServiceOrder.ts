@@ -20,7 +20,11 @@ export class CreateServiceOrder {
       request,
     );
 
-    if (this.isOrderAssigned(newServiceOrder)) {
+    const isOrderAssigned =
+      newServiceOrder.status === OrderStatus.PENDING &&
+      newServiceOrder.getValues().execution?.executor;
+
+    if (isOrderAssigned) {
       const execution = newServiceOrder.getValues().execution;
       if (execution) {
         execution.assignedTime = new Date();
@@ -32,13 +36,6 @@ export class CreateServiceOrder {
     this.notifyNewOrder(id);
 
     return id;
-  }
-
-  private isOrderAssigned(newServiceOrder: ServiceOrder) {
-    return (
-      newServiceOrder.status === OrderStatus.PENDING &&
-      newServiceOrder.getValues().execution?.executor
-    );
   }
 
   private notifyNewOrder(id: number) {
