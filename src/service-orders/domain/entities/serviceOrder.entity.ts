@@ -63,7 +63,7 @@ export class ServiceOrder extends Entity<ServiceOrderProps> {
     this.orderStatus = StatusFactory.createOrderStatus(newStatus, this);
     this.getValues().status = newStatus;
 
-    if (newStatus === OrderStatus.DONE) {
+    if (newStatus === OrderStatus.DONE || newStatus === OrderStatus.CANCELED) {
       const execution = this.getValues().execution;
       if (execution) {
         execution.resolutionTime = new Date();
