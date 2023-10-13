@@ -2,20 +2,23 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import Pubnub from 'pubnub';
 
+export type TYPE_NOTIFICATION = 'success' | 'warning' | 'error';
+export const GLOBAL_CHANNEL = 'notifications';
+export const EMPLOYEE_CHANNEL = 'EMPLOYEE_';
+export const BACKOFFICE_CHANNEL = 'web_notifications';
+
 interface PayloadNotification {
   title: string;
   subtitle?: string;
   body: string;
+  type?: TYPE_NOTIFICATION;
 }
 
 export interface Notification {
-  channel: string;
+  channels: string[];
   payload: PayloadNotification;
   data?: any;
 }
-
-export const GLOBAL_CHANNEL = 'notifications';
-export const EMPLOYEE_CHANNEL = 'EMPLOYEE_';
 
 @Injectable()
 export class PubNubClient {
@@ -32,16 +35,18 @@ export class PubNubClient {
   }
 
   sendNotification(notification: Notification): void {
-    const publishPayload = {
-      channel: notification.channel,
-      message: {
-        pn_gcm: {
-          notification: notification.payload,
-          data: notification.data,
+    notification.channels.forEach((channel) => {
+      const publishPayload = {
+        channel: channel,
+        message: {
+          pn_gcm: {
+            notification: notification.payload,
+            data: notification.data,
+          },
         },
-      },
-    };
+      };
 
-    this.pubnubRef.publish(publishPayload);
+      this.pubnubRef.publish(publishPayload);
+    });
   }
 }

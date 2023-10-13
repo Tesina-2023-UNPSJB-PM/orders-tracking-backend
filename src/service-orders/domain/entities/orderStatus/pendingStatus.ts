@@ -1,4 +1,5 @@
 import {
+  BACKOFFICE_CHANNEL,
   EMPLOYEE_CHANNEL,
   Notification,
 } from 'src/service-orders/infrastructure/client/pubnub.client';
@@ -28,7 +29,7 @@ export class PendingStatus implements OrderServiceStatus {
     const employeeId = executor?.id;
     const fullNameEmployee = `${executor?.firstName} ${executor?.lastName}`;
     return {
-      channel: `${EMPLOYEE_CHANNEL}${employeeId}`,
+      channels: [`${EMPLOYEE_CHANNEL}${employeeId}`, BACKOFFICE_CHANNEL],
       payload: {
         title: 'Orden asignada',
         body: `Orden ${

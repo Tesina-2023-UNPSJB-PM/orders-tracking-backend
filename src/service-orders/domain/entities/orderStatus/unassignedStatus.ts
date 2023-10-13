@@ -25,7 +25,7 @@ export class UnassignedStatus implements OrderServiceStatus {
 
   getNotification(): Notification | undefined {
     return {
-      channel: GLOBAL_CHANNEL,
+      channels: [GLOBAL_CHANNEL],
       payload: {
         title: 'Orden sin asignar',
         body: `Se creo la orden ${this.context.id}`,
