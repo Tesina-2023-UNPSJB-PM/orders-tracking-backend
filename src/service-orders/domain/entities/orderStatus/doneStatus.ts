@@ -1,4 +1,5 @@
 import {
+  BACKOFFICE_CHANNEL,
   GLOBAL_CHANNEL,
   Notification,
 } from 'src/service-orders/infrastructure/client/pubnub.client';
@@ -25,10 +26,11 @@ export class DoneStatus implements OrderServiceStatus {
 
   getNotification(): Notification {
     return {
-      channel: GLOBAL_CHANNEL,
+      channels: [GLOBAL_CHANNEL, BACKOFFICE_CHANNEL],
       payload: {
         title: 'Orden finalizada',
         body: `La orden ${this.context.getValues().number} a sido finalizada`,
+        type: 'success',
       },
     };
   }
